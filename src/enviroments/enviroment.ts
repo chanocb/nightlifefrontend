@@ -4,5 +4,5 @@ export const environment = {
     production: false,
     NAME: pkg.name,
     VERSION: pkg.version,
-    REST: 'http://localhost:8081'
+    REST: 'http://host.docker.internal:8082'
 };
