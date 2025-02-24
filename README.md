@@ -1,5 +1,11 @@
 # Nightlifefrontend
 
+# Estado del codigo
+
+[![CI](https://github.com/chanocb/nightlifefrontend/actions/workflows/ci.yml/badge.svg)](https://github.com/chanocb/nightlifefrontend/actions/workflows/ci.yml)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=chanocb_nightlifefrontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=chanocb_nightlifefrontend)
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
 
 ## Development server
