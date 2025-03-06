@@ -1,41 +1,58 @@
 <div class="container mt-5">
-  <form>
-    <h2 class="text-center mb-4">Registrarse</h2> <!-- Título con centrado y margen inferior -->
-    
+  <form (ngSubmit)="register()" #registryForm="ngForm">
+    <h2 class="text-center mb-4">Registrarse</h2>
+
     <!-- Campo de Email -->
     <div class="mb-3">
       <label for="email" class="form-label">Email:</label>
-      <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required>
+      <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required #email="ngModel" email/>
+      <!-- Mensaje de error -->
+      <div *ngIf="email.invalid && email.touched" class="text-danger">
+        El correo electrónico no tiene un formato válido.
+      </div>
     </div>
 
     <!-- Campo de Contraseña -->
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña:</label>
-      <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required>
+      <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required />
+    </div>
+
+    <!-- Campo de Repetir Contraseña -->
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Repetir Contraseña:</label>
+      <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+      <div *ngIf="confirmPassword && confirmPassword !== user.password" class="text-danger">
+        Las contraseñas no coinciden.
+      </div>
     </div>
 
     <!-- Campo de Nombre -->
     <div class="mb-3">
       <label for="firstName" class="form-label">Nombre:</label>
-      <input type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName" name="firstName" required>
+      <input type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName" name="firstName" required />
     </div>
 
     <!-- Campo de Apellido -->
     <div class="mb-3">
       <label for="lastName" class="form-label">Apellido:</label>
-      <input type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName" required>
+      <input type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName" required />
     </div>
 
     <!-- Campo de Teléfono -->
     <div class="mb-3">
       <label for="phone" class="form-label">Teléfono:</label>
-      <input type="tel" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone" required>
+      <input type="tel" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone" required pattern="^\d*$" #phone="ngModel" phone/>
+      <!-- Mensaje de error -->
+      <div *ngIf="phone.invalid && phone.touched" class="text-danger">
+        El número de teléfono debe contener solo números.
+      </div>
     </div>
 
     <!-- Campo de Fecha de Nacimiento -->
     <div class="mb-3">
       <label for="birthDate" class="form-label">Fecha de Nacimiento:</label>
-      <input type="date" class="form-control" id="birthDate" [(ngModel)]="user.birthDate" name="birthDate" required>
+      <input type="date" class="form-control" id="birthDate" [(ngModel)]="user.birthDate" name="birthDate" required />
     </div>
 
     <!-- Campo de Rol -->
@@ -45,14 +62,15 @@
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
       </select>
     </div>
+    
 
-    <button type="button" class="btn btn-primary" (click)="register()">Registrarse</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!registryForm.valid">Registrarse</button>
 
-<!-- Mostrar resultado solo cuando se haya registrado -->
-<div *ngIf="registeredUser$ | async as registeredUser">
-  <div class="alert alert-success mt-3">
-    <strong>Registro exitoso:</strong> {{ registeredUser.firstName }} {{ registeredUser.lastName }}
-  </div>
-</div>
+    <!-- Mostrar resultado solo cuando se haya registrado -->
+    <div *ngIf="registeredUser$ | async as registeredUser">
+      <div class="alert alert-success mt-3">
+        <strong>Registro exitoso:</strong> {{ registeredUser.firstName }} {{ registeredUser.lastName }}
+      </div>
+    </div>
   </form>
 </div>
