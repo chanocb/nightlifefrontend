@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <form>
+    <h2 class="text-center mb-4">Registrarse</h2> <!-- Título con centrado y margen inferior -->
+    
+    <!-- Campo de Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required>
+    </div>
+
+    <!-- Campo de Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña:</label>
+      <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password" required>
+    </div>
+
+    <!-- Campo de Nombre -->
+    <div class="mb-3">
+      <label for="firstName" class="form-label">Nombre:</label>
+      <input type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName" name="firstName" required>
+    </div>
+
+    <!-- Campo de Apellido -->
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Apellido:</label>
+      <input type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName" required>
+    </div>
+
+    <!-- Campo de Teléfono -->
+    <div class="mb-3">
+      <label for="phone" class="form-label">Teléfono:</label>
+      <input type="tel" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone" required>
+    </div>
+
+    <!-- Campo de Fecha de Nacimiento -->
+    <div class="mb-3">
+      <label for="birthDate" class="form-label">Fecha de Nacimiento:</label>
+      <input type="date" class="form-control" id="birthDate" [(ngModel)]="user.birthDate" name="birthDate" required>
+    </div>
+
+    <!-- Campo de Rol -->
+    <div class="mb-3">
+      <label for="role" class="form-label">Rol:</label>
+      <select class="form-select" id="role" [(ngModel)]="user.role" name="role">
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary">Registrarse</button>
+    </div>
+  </form>
+</div>
