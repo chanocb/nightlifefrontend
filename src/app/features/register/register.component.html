@@ -46,9 +46,13 @@
       </select>
     </div>
 
-    <!-- Botón de envío -->
-    <div class="d-grid gap-2">
-      <button type="submit" class="btn btn-primary">Registrarse</button>
-    </div>
+    <button type="button" class="btn btn-primary" (click)="register()">Registrarse</button>
+
+<!-- Mostrar resultado solo cuando se haya registrado -->
+<div *ngIf="registeredUser$ | async as registeredUser">
+  <div class="alert alert-success mt-3">
+    <strong>Registro exitoso:</strong> {{ registeredUser.firstName }} {{ registeredUser.lastName }}
+  </div>
+</div>
   </form>
 </div>
