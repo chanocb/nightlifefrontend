@@ -4,5 +4,5 @@ export const environment = {
     production: true,
     NAME: pkg.name,
     VERSION: pkg.version,
-    REST: 'https://nightlifefrontend-latest.onrender.com',
+    REST: 'https://nightlifebackend-latest.onrender.com',
 };
