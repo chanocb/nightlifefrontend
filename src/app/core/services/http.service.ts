@@ -170,7 +170,16 @@ export class HttpService {
     } else {
         try {
             error = response.error; // with 'text': JSON.parse(response.error);
-            this.showError(error.error + ' (' + response.status + '): ' + error.message);
+            let errorMessage = error.message || response.message || 'Unknown error';
+
+            // Extraer solo la parte de "Detail" hasta el primer ']'
+            const detailMatch = errorMessage.match(/Detail: (.*?)\]/);
+            if (detailMatch && detailMatch[1]) {
+                errorMessage = detailMatch[1]; // Usar solo la parte de "Detail" hasta ']'
+            }
+
+            this.showError(error.error + ' (' + response.status + '): ' + errorMessage);
+            //this.showError(error.error + ' (' + response.status + '): ' + error.message);
             return throwError(() => error);
         } catch (e) {
             this.showError('Not response');
