@@ -13,23 +13,23 @@ export class HttpService {
   static readonly UNAUTHORIZED = 401;
   static readonly BAD_REQUEST = 400;
 
-  private headers: HttpHeaders = new HttpHeaders();  // Inicialización directa en la declaración
-  private params: HttpParams = new HttpParams();      // Inicialización directa en la declaración
-  private responseType: string = 'json';              // Inicialización directa en la declaración
-  private successfulNotification: string | undefined = undefined;  // Inicializado como undefined
-  private errorNotification: string | undefined = undefined;        // Inicializado como undefined
+  private headers: HttpHeaders = new HttpHeaders();
+  private params: HttpParams = new HttpParams();
+  private responseType: string = 'json';
+  private successfulNotification: string | undefined = undefined;
+  private errorNotification: string | undefined = undefined;
 
   constructor(
     private readonly http: HttpClient,
     private readonly snackBar: MatSnackBar,
     private readonly router: Router
   ) {
-    this.resetOptions();  // Llamada al método resetOptions() para asegurar la configuración correcta
+    this.resetOptions();
   }
 
   param(key: string, value: string): this {
     if (value != null) {
-      this.params = this.params.append(key, value); // Esta clase es inmutable
+      this.params = this.params.append(key, value);
     }
     return this;
   }
@@ -100,13 +100,13 @@ export class HttpService {
       );
   }
 
-  authBasic(mobile: number, password: string): HttpService {
-    return this.header('Authorization', 'Basic ' + btoa(mobile + ':' + password));
+  authBasic(email: string, password: string): HttpService {
+    return this.header('Authorization', 'Basic ' + btoa(email + ':' + password));
   }
 
   header(key: string, value: string): HttpService {
     if (value != null) {
-      this.headers = this.headers.append(key, value); // Esta clase es inmutable
+      this.headers = this.headers.append(key, value);
     }
     return this;
   }
@@ -130,9 +130,7 @@ export class HttpService {
 
   private extractData(response: any): any {
     if (this.successfulNotification) {
-      this.snackBar.open(this.successfulNotification, '', {
-        duration: 2000
-      });
+      this.snackBar.open(this.successfulNotification, '', { duration: 2000 });
       this.successfulNotification = undefined;
     }
     const contentType = response.headers.get('content-type');
@@ -141,7 +139,7 @@ export class HttpService {
         const blob = new Blob([response.body], { type: 'application/pdf' });
         window.open(window.URL.createObjectURL(blob));
       } else if (contentType.indexOf('application/json') !== -1) {
-        return response.body; // with 'text': JSON.parse(response.body);
+        return response.body;
       }
     } else {
       return response;
@@ -150,14 +148,13 @@ export class HttpService {
 
   private showError(notification: string): void {
     if (this.errorNotification) {
-      this.snackBar.open(this.errorNotification, 'Error', { duration: 5000 });
+      this.snackBar.open(this.errorNotification, '', { duration: 5000 });
       this.errorNotification = undefined;
     } else {
-      this.snackBar.open(notification, 'Error', { duration: 5000 });
+      this.snackBar.open(notification, '', { duration: 5000 });
     }
   }
 
-  
   private handleError(response: any): any {
     let error: AppError;
     if (response.status === HttpService.UNAUTHORIZED) {
@@ -167,24 +164,30 @@ export class HttpService {
     } else if (response.status === HttpService.CONNECTION_REFUSE) {
         this.showError('Connection Refuse');
         return EMPTY;
-    } else {
+    } else if (response.status === HttpService.BAD_REQUEST) {
         try {
-            error = response.error; // with 'text': JSON.parse(response.error);
+            error = response.error;
             let errorMessage = error.message || response.message || 'Unknown error';
 
-            // Extraer solo la parte de "Detail" hasta el primer ']'
-            const detailMatch = errorMessage.match(/Detail: (.*?)\]/);
-            if (detailMatch && detailMatch[1]) {
-                errorMessage = detailMatch[1]; // Usar solo la parte de "Detail" hasta ']'
+            const duplicateKeyMatch = errorMessage.match(/Key \((.*?)\)=\((.*?)\) already exists/);
+            if (duplicateKeyMatch) {
+                const duplicatedField = duplicateKeyMatch[1]; 
+                if (duplicatedField === 'email') {
+                    errorMessage = 'Email already registered';
+                } else {
+                    errorMessage = `${duplicatedField} already registered`;
+                }
             }
 
-            this.showError(error.error + ' (' + response.status + '): ' + errorMessage);
-            //this.showError(error.error + ' (' + response.status + '): ' + error.message);
+            this.showError(errorMessage);
             return throwError(() => error);
         } catch (e) {
             this.showError('Not response');
             return throwError(() => response.error);
         }
+    } else {
+        this.showError('Unexpected error');
+        return throwError(() => response.error);
     }
 }
 }
