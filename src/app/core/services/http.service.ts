@@ -157,6 +157,7 @@ export class HttpService {
 
   private handleError(response: any): any {
     let error: AppError;
+
     if (response.status === HttpService.UNAUTHORIZED) {
         this.showError('Unauthorized');
         this.router.navigate(['']).then();
@@ -169,6 +170,12 @@ export class HttpService {
             error = response.error;
             let errorMessage = error.message || response.message || 'Unknown error';
 
+            // Verificar si la respuesta contiene errores de validación (devueltos como objeto {campo: mensaje})
+            if (error && typeof error === 'object' && !Array.isArray(error)) {
+                errorMessage = Object.values(error).join('\n'); // Unir mensajes en líneas separadas
+            }
+
+            // Manejo del error de clave duplicada (DataIntegrityViolationException)
             const duplicateKeyMatch = errorMessage.match(/Key \((.*?)\)=\((.*?)\) already exists/);
             if (duplicateKeyMatch) {
                 const duplicatedField = duplicateKeyMatch[1]; 
