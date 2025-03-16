@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
-import { User } from '@core/models/user.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -12,11 +12,18 @@ import { User } from '@core/models/user.model';
   styleUrl: './nav.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavComponent { 
+export class NavComponent{ 
+
+  isAuthenticated$: Observable<boolean>;
 
   constructor(
-    private router: Router
-  ) {}
-
+    private router: Router,private authService: AuthService
+  ) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+  }
+  
+  logout(): void {
+    this.authService.logout();
+  }
  
 }

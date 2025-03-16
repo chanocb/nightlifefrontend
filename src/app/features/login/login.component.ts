@@ -30,7 +30,11 @@ export class LoginComponent {
   }
 
   login() {
-    this.user$ = this.authService.login(this.email, this.password);
-    console.log('Usuario autenticado: ', this.user$);
+    this.authService.login(this.email, this.password).subscribe(
+      (user) => {
+        if(user){
+          this.router.navigate(['/home'])
+          console.log('Usuario autenticado: ', this.user$);
+        }});
   }
 }
