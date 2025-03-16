@@ -6,8 +6,11 @@
           <h2 class="card-title mb-4">Bienvenido a Nightlife</h2>
           <p class="card-text mb-4">¡Gracias por visitar nuestra página! Aquí podrás registrarte, conocer los eventos más recientes y mucho más.</p>
           <p class="card-text mb-5">¡Esperamos que disfrutes tu experiencia con nosotros!</p>
-          <a href="/register" class="btn btn-primary me-3">Registrarse</a>
-          <a href="/login" class="btn btn-secondary me-3">Login</a>
+          <!-- Mostrar solo si el usuario NO está autenticado -->
+          <div *ngIf="!isAuthenticated()">
+            <a routerLink="/register" class="btn btn-primary me-3">Registrarse</a>
+            <a routerLink="/login" class="btn btn-secondary me-3">Login</a>
+          </div>
         </div>
       </div>
     </div>
