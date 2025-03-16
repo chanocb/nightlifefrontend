@@ -7,7 +7,7 @@
           <p class="card-text mb-4">¡Gracias por visitar nuestra página! Aquí podrás registrarte, conocer los eventos más recientes y mucho más.</p>
           <p class="card-text mb-5">¡Esperamos que disfrutes tu experiencia con nosotros!</p>
           <!-- Mostrar solo si el usuario NO está autenticado -->
-          <div *ngIf="!isAuthenticated()">
+          <div *ngIf="!(isAuthenticated$ | async)">
             <a routerLink="/register" class="btn btn-primary me-3">Registrarse</a>
             <a routerLink="/login" class="btn btn-secondary me-3">Login</a>
           </div>

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -25,10 +26,10 @@ export class HomeComponent {
     role: Role.CLIENT
   };
   roles: Role[] = [Role.OWNER, Role.CLIENT];
+  isAuthenticated$: Observable<boolean>;
 
-  constructor(private router: Router,private authService: AuthService) {}
-
-  isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
+  constructor(private router: Router,private authService: AuthService) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
+
 }
