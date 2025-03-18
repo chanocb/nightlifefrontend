@@ -27,6 +27,11 @@
           Logout
         </a>
       </li>
+      <li class="nav-item" *ngIf="isAuthenticated$ | async">
+        <a class="nav-link" routerLink="profile"> <mat-icon>account_circle</mat-icon>
+          Perfil
+        </a>
+      </li>
       
       </ul>
     </div>

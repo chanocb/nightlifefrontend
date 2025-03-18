@@ -44,7 +44,44 @@ isAuthenticated(): boolean {
   return this.user != null && !(new JwtHelperService().isTokenExpired(this.user.token));
 }
 
+getProfile(): Observable<User> {
+  const token = this.user?.token;
+  const email = this.user?.email;
+
+  console.log('Obteniendo perfil con:', { token, email });
+
+  if (!token || !email) {
+    console.error('Error: Usuario no autenticado');
+    throw new Error('Usuario no autenticado');
+  }
+
+  return this.httpService
+    .header('Authorization', `Bearer ${token}`)
+    .get(`${AuthService.END_POINT}/${email}`);
+  
+  }
+
+  updateProfile(user: User): Observable<User> {
+    const token = this.user?.token;
+  const email = this.user?.email;
+
+  console.log('Obteniendo perfil con:', { token, email });
+
+  if (!token || !email) {
+    console.error('Error: Usuario no autenticado');
+    throw new Error('Usuario no autenticado');
+  }
+
+  return this.httpService
+    .header('Authorization', `Bearer ${token}`)
+    .put(`${AuthService.END_POINT}/${email}`, user);
+  
+  }
+    //return this.httpService.put(`${AuthService.END_POINT}/${email}`, user);
+  //}
+}
+
   
 
   
-}
+

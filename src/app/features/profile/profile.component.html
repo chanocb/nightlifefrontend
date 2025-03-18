@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Perfil de Usuario</h2>
+    </div>
+    <div class="card-body">
+
+      <!-- Modo Visualización -->
+      <div *ngIf="!isEditing; else editForm">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>Nombre</th>
+              <td>{{ user?.firstName }} {{ user?.lastName }}</td>
+            </tr>
+            <tr>
+              <th>Correo electrónico</th>
+              <td>{{ user?.email }}</td>
+            </tr>
+            <tr>
+              <th>Teléfono</th>
+              <td>{{ user?.phone }}</td>
+            </tr>
+            <tr>
+              <th>Fecha de Nacimiento</th>
+              <td>{{ user?.birthDate | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+            <tr>
+              <th>Rol</th>
+              <td>{{ user?.role }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-primary" (click)="toggleEditMode()">Editar Perfil</button>
+      </div>
+
+      <!-- Modo Edición -->
+      <ng-template #editForm>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="firstName" class="form-label">Nombre</label>
+                <input id="firstName" type="text" formControlName="firstName" class="form-control" required />
+                <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="text-danger">
+                  El nombre es obligatorio.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="lastName" class="form-label">Apellido</label>
+                <input id="lastName" type="text" formControlName="lastName" class="form-control" required />
+                <div *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="text-danger">
+                  El apellido es obligatorio.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email" type="email" formControlName="email" class="form-control"  />
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="phone" class="form-label">Teléfono</label>
+                <input id="phone" type="text" formControlName="phone" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="birthDate" class="form-label">Fecha de Nacimiento</label>
+                <input id="birthDate" type="date" formControlName="birthDate" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="role" class="form-label">Rol</label>
+            <input id="role" type="text" formControlName="role" class="form-control"  />
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-success" [disabled]="!profileForm.valid">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">Cancelar</button>
+          </div>
+        </form>
+      </ng-template>
+
+      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+    </div>
+  </div>
+</div>
