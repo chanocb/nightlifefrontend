@@ -160,7 +160,6 @@ export class HttpService {
 
     if (response.status === HttpService.UNAUTHORIZED) {
         this.showError('Unauthorized');
-        this.router.navigate(['']).then();
         return EMPTY;
     } else if (response.status === HttpService.CONNECTION_REFUSE) {
         this.showError('Connection Refuse');
@@ -169,13 +168,9 @@ export class HttpService {
         try {
             error = response.error;
             let errorMessage = error.message || response.message || 'Unknown error';
-
-            // Verificar si la respuesta contiene errores de validación (devueltos como objeto {campo: mensaje})
             if (error && typeof error === 'object' && !Array.isArray(error)) {
-                errorMessage = Object.values(error).join('\n'); // Unir mensajes en líneas separadas
+                errorMessage = Object.values(error).join('\n');
             }
-
-            // Manejo del error de clave duplicada (DataIntegrityViolationException)
             const duplicateKeyMatch = errorMessage.match(/Key \((.*?)\)=\((.*?)\) already exists/);
             if (duplicateKeyMatch) {
                 const duplicatedField = duplicateKeyMatch[1]; 

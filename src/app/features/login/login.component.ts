@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { User } from '@core/models/user.model';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent {
   email = '';
   password = '';
   showPassword: boolean = false;
-  user$!: Observable<User>; // Observable para manejar la autenticación
+  user$!: Observable<User | null>; // Observable para manejar la autenticación
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -30,11 +31,12 @@ export class LoginComponent {
   }
 
   login() {
-    this.authService.login(this.email, this.password).subscribe(
-      (user) => {
-        if(user){
-          this.router.navigate(['/home'])
-          console.log('Usuario autenticado: ', this.user$);
-        }});
+    this.user$ = this.authService.login(this.email, this.password).pipe(
+      tap(user => {
+        if (user) {
+          this.router.navigate(['/home']);
+        }
+      })
+    );
   }
 }

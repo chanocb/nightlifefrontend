@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   private loadUserFromStorage(): void {
-    const userFromStorage = localStorage.getItem('user');
+    const userFromStorage = sessionStorage.getItem('user');
     if (userFromStorage) {
       this.user = JSON.parse(userFromStorage);
       this.isAuthenticatedSubject.next(true);
@@ -42,7 +42,7 @@ export class AuthService {
           this.user.email = jwtHelper.decodeToken(jsonToken.token).user;
           this.user.name = jwtHelper.decodeToken(jsonToken.token).name;
           this.user.role = jwtHelper.decodeToken(jsonToken.token).role;
-          localStorage.setItem('user', JSON.stringify(this.user));
+          sessionStorage.setItem('user', JSON.stringify(this.user));
           this.isAuthenticatedSubject.next(true);
           return this.user;
         })
@@ -52,12 +52,12 @@ export class AuthService {
   logout(): void {
     this.user = undefined;
     this.isAuthenticatedSubject.next(false);
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     this.router.navigate(['']).then();
   }
 
   isAuthenticated(): boolean {
-    const userFromStorage = localStorage.getItem('user');
+    const userFromStorage = sessionStorage.getItem('user');
     if (userFromStorage) {
       this.user = JSON.parse(userFromStorage);
       const jwtHelper = new JwtHelperService();
