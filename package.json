@@ -1,6 +1,6 @@
 {
   "name": "nightlifefrontend",
-  "version": "1.2.2-Release",
+  "version": "1.2.3-Release",
   "scripts": {
     "build-prod": "ng build --configuration production",
     "test-ci": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
