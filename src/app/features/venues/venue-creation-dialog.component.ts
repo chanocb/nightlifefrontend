@@ -6,12 +6,13 @@ import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule
+    MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule, MatGridList, MatGridTile, MatDialogContent
   ],
   templateUrl: './venue-creation-dialog.component.html',
   styleUrls: ['./venues.component.css']
@@ -27,7 +28,7 @@ export class VenueCreateDialogComponent {
         name: ['', [Validators.required]],
         phone: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
         LGTBFriendly: [false],
-        instagram: [false]
+        instagram: ['']
       });
     }
   

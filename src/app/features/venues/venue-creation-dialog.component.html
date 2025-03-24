@@ -1,29 +1,20 @@
-<h2 mat-dialog-title>Crear Venue</h2>
+<h2 mat-dialog-title style="margin-bottom: 1px;">Crear Venue</h2>
 
-<mat-dialog-content>
-  <!-- Agrega [formGroup] y corrige el tipo de input para el teléfono -->
-  <form [formGroup]="venueForm"> 
-    <mat-form-field class="full-width">
+<mat-dialog-content style="display: flex; flex-direction: column; gap: 22px; width: 100%; max-width: 400px;">
+  <form [formGroup]="venueForm" style="display: flex; flex-direction: column; gap: 22px; margin-top: 10px;">
+    <!-- Nombre -->
+    <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Nombre</mat-label>
-      <input 
-        matInput 
-        formControlName="name" 
-        type="text" 
-        required
-        (input)="venueForm.controls['name'].updateValueAndValidity()"
-      >
+      <input matInput formControlName="name" required>
       <mat-error *ngIf="venueForm.get('name')?.hasError('required')">
         El nombre es obligatorio.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <!-- Teléfono -->
+    <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Teléfono</mat-label>
-      <input matInput type="tel" 
-        formControlName="phone" 
-        required
-        (input)="venueForm.controls['phone'].updateValueAndValidity()"
-        maxlength="9"> <!-- Limita a 9 dígitos -->
+      <input matInput type="tel" formControlName="phone" required maxlength="9">
       <mat-error *ngIf="venueForm.get('phone')?.hasError('required')">
         El teléfono es obligatorio.
       </mat-error>
@@ -32,14 +23,19 @@
       </mat-error>
     </mat-form-field>
 
+    <!-- Instagram -->
+    <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
+      <mat-label>Instagram</mat-label>
+      <input matInput type="text" formControlName="instagram">
+    </mat-form-field>
+
+    <!-- Checkbox LGTB Friendly -->
     <mat-checkbox formControlName="LGTBFriendly">LGTB Friendly</mat-checkbox>
-    <mat-checkbox formControlName="instagram">Instagram</mat-checkbox>
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions >
   <button mat-dialog-close mat-raised-button>Cancelar</button>
-  <!-- Botón "Crear" se habilita solo si nombre y teléfono son válidos -->
   <button 
     (click)="create()" 
     [disabled]="!venueForm.valid" 
