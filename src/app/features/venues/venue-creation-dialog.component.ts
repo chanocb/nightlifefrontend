@@ -7,6 +7,7 @@ import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { VenueHomeService } from './venue-home.service';
 
 @Component({
   standalone: true,
@@ -22,7 +23,7 @@ export class VenueCreateDialogComponent {
 
     constructor(
       private readonly fb: FormBuilder,
-      private readonly dialog: MatDialogRef<VenueCreateDialogComponent>
+      private readonly dialog: MatDialogRef<VenueCreateDialogComponent>,private readonly venueHomeService: VenueHomeService
     ) {
       this.venueForm = this.fb.group({
         name: ['', [Validators.required]],
@@ -35,6 +36,7 @@ export class VenueCreateDialogComponent {
     create(): void {
       if (this.venueForm.valid) {
         this.dialog.close(this.venueForm.value);
+        this.venueHomeService.create(this.venueForm.value).subscribe(() => { this.dialog.close(); });
       }
     }
 }
