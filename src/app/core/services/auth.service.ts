@@ -5,6 +5,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import { Role } from '@core/models/role.model';
 
 @Injectable({
   providedIn: 'root',
@@ -86,5 +87,13 @@ export class AuthService {
 
   getToken(): string {
     return this.user ? this.user.token : undefined;
+  }
+
+  hasRoles(roles: Role[]): boolean {
+    return this.isAuthenticated() && roles.includes(this.user.role);
+  }
+
+  isOwner(): boolean {
+      return this.hasRoles([Role.OWNER]);
   }
 }

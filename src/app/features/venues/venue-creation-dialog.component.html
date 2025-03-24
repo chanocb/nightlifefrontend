@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Crear Venue</h2>
+
+<mat-dialog-content>
+  <!-- Agrega [formGroup] y corrige el tipo de input para el teléfono -->
+  <form [formGroup]="venueForm"> 
+    <mat-form-field class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input 
+        matInput 
+        formControlName="name" 
+        type="text" 
+        required
+        (input)="venueForm.controls['name'].updateValueAndValidity()"
+      >
+      <mat-error *ngIf="venueForm.get('name')?.hasError('required')">
+        El nombre es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Teléfono</mat-label>
+      <input matInput type="tel" 
+        formControlName="phone" 
+        required
+        (input)="venueForm.controls['phone'].updateValueAndValidity()"
+        maxlength="9"> <!-- Limita a 9 dígitos -->
+      <mat-error *ngIf="venueForm.get('phone')?.hasError('required')">
+        El teléfono es obligatorio.
+      </mat-error>
+      <mat-error *ngIf="venueForm.get('phone')?.hasError('pattern')">
+        El número debe tener exactamente 9 dígitos.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="LGTBFriendly">LGTB Friendly</mat-checkbox>
+    <mat-checkbox formControlName="instagram">Instagram</mat-checkbox>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button>Cancelar</button>
+  <!-- Botón "Crear" se habilita solo si nombre y teléfono son válidos -->
+  <button 
+    (click)="create()" 
+    [disabled]="!venueForm.valid" 
+    color="primary" 
+    mat-raised-button
+  >
+    Crear
+  </button>
+</mat-dialog-actions>
