@@ -1,0 +1,75 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Detalles del Venue</h2>
+    </div>
+    <div class="card-body">
+      
+      <!-- Modo Visualización -->
+      <div *ngIf="!isEditing; else editForm">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>Nombre</th>
+              <td>{{ venue?.name }}</td>
+            </tr>
+            <tr>
+              <th>Teléfono</th>
+              <td>{{ venue?.phone }}</td>
+            </tr>
+            <tr>
+              <th>Instagram</th>
+              <td>{{ venue?.instagram || 'No disponible' }}</td>
+            </tr>
+            <tr>
+              <th>🏳️‍🌈 LGTB Friendly</th>
+              <td>{{ venue?.LGTBFriendly ? 'Sí' : 'No' }}</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        <!-- Mostrar botón de editar solo si el usuario es un OWNER -->
+        <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()">Editar</button>
+      </div>
+
+      <!-- Modo Edición -->
+      <ng-template #editForm>
+        <form [formGroup]="venueForm" (ngSubmit)="saveVenue()">
+          <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input id="name" type="text" formControlName="name" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="phone" class="form-label">Teléfono</label>
+            <input id="phone" type="text" formControlName="phone" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="instagram" class="form-label">Instagram</label>
+            <input id="instagram" type="text" formControlName="instagram" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label for="LGTBFriendly" class="form-label">🏳️‍🌈 LGTB Friendly</label>
+            <!-- El checkbox se controla mediante el formControlName, desmarcado si LGTBFriendly es falso -->
+            <mat-checkbox 
+              formControlName="LGTBFriendly"
+              [checked]="venue?.LGTBFriendly" 
+              [disabled]="!isEditing">
+              
+            </mat-checkbox>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-success" [disabled]="!venueForm.valid">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">Cancelar</button>
+          </div>
+        </form>
+      </ng-template>
+
+      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+    </div>
+  </div>
+</div>

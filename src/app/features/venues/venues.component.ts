@@ -4,10 +4,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
 import { VenueCreateDialogComponent } from './venue-creation-dialog.component';
+import { Venue } from '../shared/models/venue.model';
+import { VenueHomeService } from './venue-home.service';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-venues',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatCard, MatCardHeader, MatCardTitle, MatCardContent],
   templateUrl: './venues.component.html',
   styleUrl: './venues.component.css'
 })
@@ -15,16 +20,29 @@ export class VenuesComponent implements OnInit{
 
   isOwner: boolean = false;
 
-  constructor(private readonly dialog: MatDialog, private authService: AuthService) {}
+  venues$!: Observable<Venue[]>;
+
+  constructor(private readonly dialog: MatDialog, private authService: AuthService, private venueService: VenueHomeService, private router: Router) {}
 
 
   ngOnInit(): void {
     this.isOwner = this.authService.isOwner();
+    this.venues$ = this.venueService.getVenuesObservable();
+    this.venueService.getVenues().subscribe((venues) => {
+      console.log('Datos de venues:', venues);  // Verifica si reference está presente
+    });
   }
 
   create(): void {
     this.dialog.open(VenueCreateDialogComponent).afterClosed();
     console.log('Create venue');
   }
+
+  goToDetails(reference: string): void {
+    console.log('Navegando a:', `/venues/${reference}`);
+    this.router.navigate(['/venues', reference]);
+  }
+
+  
 
 }

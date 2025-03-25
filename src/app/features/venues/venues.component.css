@@ -1,0 +1,8 @@
+.clickable-card {
+    cursor: pointer; /* Cambia el cursor a una mano cuando está sobre la tarjeta */
+}
+
+.clickable-card:hover {
+    transform: scale(1.05); /* Efecto de agrandamiento suave */
+    transition: transform 0.3s ease-in-out; /* Efecto suave */
+}
