@@ -96,4 +96,10 @@ export class AuthService {
   isOwner(): boolean {
       return this.hasRoles([Role.OWNER]);
   }
+
+  getUserEmail(): string | null {
+    return this.user ? this.user.email : null;
+  }
+  
+  
 }

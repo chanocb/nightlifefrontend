@@ -5,13 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { NgIf } from '@angular/common';
-import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-venue-detail',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule],
   templateUrl: './venue-detail.component.html',
   styleUrls: ['./venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +48,9 @@ export class VenueDetailComponent implements OnInit {
           this.venue = venue;
           this.loadVenueDataIntoForm(venue);
           this.isOwner = this.authService.isOwner(); // Verificamos si el usuario es un OWNER
+
+          const userEmail = this.authService.getUserEmail();
+          this.isOwner = this.authService.isOwner() && venue.user.email === userEmail;
           this.cdRef.markForCheck();
         },
         error: (error) => {
@@ -67,6 +71,10 @@ export class VenueDetailComponent implements OnInit {
   }
 
   toggleEditMode(): void {
+    if (!this.isOwner) {
+      this.error = 'No tienes permiso para editar este venue.'; // Mostrar mensaje de error si no es el Owner
+      return; // No permitimos la edición si no es el propietario
+    }
     this.isEditing = !this.isEditing;
     if (!this.isEditing && this.venue) {
       this.loadVenueDataIntoForm(this.venue);

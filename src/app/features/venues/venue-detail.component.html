@@ -14,12 +14,15 @@
               <td>{{ venue?.name }}</td>
             </tr>
             <tr>
-              <th>Teléfono</th>
+              <th><mat-icon>phone</mat-icon>Teléfono</th>
               <td>{{ venue?.phone }}</td>
             </tr>
             <tr>
-              <th>Instagram</th>
-              <td>{{ venue?.instagram || 'No disponible' }}</td>
+              <th><i class="fab fa-instagram"></i>  Instagram</th>
+              <a *ngIf="venue?.instagram" href="https://instagram.com/{{ venue?.instagram }}" target="_blank">
+                {{ venue?.instagram }}
+              </a>
+              <span *ngIf="!venue?.instagram">No disponible</span>
             </tr>
             <tr>
               <th>🏳️‍🌈 LGTB Friendly</th>
@@ -30,7 +33,7 @@
         </table>
         
         <!-- Mostrar botón de editar solo si el usuario es un OWNER -->
-        <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()">Editar</button>
+        <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()"><mat-icon>edit</mat-icon>Editar</button>
       </div>
 
       <!-- Modo Edición -->
