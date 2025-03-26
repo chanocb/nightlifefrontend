@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { VenueHomeService } from './venue-home.service';
 import { Venue } from '../shared/models/venue.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './venue-confirm-dialog.component';
 
 
 @Component({
@@ -29,7 +31,9 @@ export class VenueDetailComponent implements OnInit {
     private venueService: VenueHomeService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private router: Router,
+    private dialog: MatDialog
   ) {
     // Creamos el formulario con los controles que necesitamos
     this.venueForm = this.fb.group({
@@ -82,7 +86,7 @@ export class VenueDetailComponent implements OnInit {
   }
 
   saveVenue(): void {
-    if (this.venueForm.valid && this.venue) {
+    if (this.venueForm.valid && this.venue !== null) {
       const updatedVenue = { ...this.venue, ...this.venueForm.getRawValue(), LGTBFriendly: !!this.venueForm.value.LGTBFriendly };
       console.log('🔍 Datos enviados al backend:', updatedVenue);
       this.venueService.updateVenue(this.venue.reference, updatedVenue).subscribe({
@@ -100,5 +104,28 @@ export class VenueDetailComponent implements OnInit {
     }
 
   }
+
+  deleteVenue() {
+    
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: { venueName: this.venue?.name },
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.venueService.deleteVenue(this.venue!.reference).subscribe({
+          next: () => {
+            this.router.navigate(['/venues']); // Redirigir a la lista de venues
+          },
+          error: (err) => {
+            this.error = "Error al eliminar el venue.";
+            console.error(err);
+          }
+        });
+      }
+    });
+  }
+  
    
 }

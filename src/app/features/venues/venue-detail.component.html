@@ -34,6 +34,10 @@
         
         <!-- Mostrar botón de editar solo si el usuario es un OWNER -->
         <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()"><mat-icon>edit</mat-icon>Editar</button>
+        <!-- Botón de Eliminar -->
+        <button *ngIf="isOwner" class="btn btn-danger" (click)="deleteVenue()">
+          <mat-icon>delete</mat-icon> Eliminar
+        </button>
       </div>
 
       <!-- Modo Edición -->

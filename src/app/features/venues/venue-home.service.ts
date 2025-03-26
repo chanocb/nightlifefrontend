@@ -37,4 +37,9 @@ export class VenueHomeService {
       updateVenue(reference: string, venue: Venue): Observable<Venue> {
         return this.httpService.put(VenueHomeService.END_POINT+`/${reference}`, venue);
       }
+
+      deleteVenue(reference: string): Observable<void> {
+        return this.httpService.delete(VenueHomeService.END_POINT+`/${reference}`);
+      }
+      
 }
