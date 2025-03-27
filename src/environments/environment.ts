@@ -6,3 +6,5 @@ export const environment = {
     VERSION: pkg.version,
     REST: 'http://localhost:8081', //NOSONAR
 };
+
+
