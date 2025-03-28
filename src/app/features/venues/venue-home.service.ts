@@ -34,6 +34,10 @@ export class VenueHomeService {
         return this.httpService.get(VenueHomeService.END_POINT+`/${reference}`);
       }
 
+      getVenuesByOwner(email: string): Observable<Venue[]> {
+        return this.httpService.get(VenueHomeService.END_POINT+`/owner?email=${email}`);
+      }
+
       updateVenue(reference: string, venue: Venue): Observable<Venue> {
         return this.httpService.put(VenueHomeService.END_POINT+`/${reference}`, venue);
       }

@@ -19,10 +19,12 @@
             </tr>
             <tr>
               <th><i class="fab fa-instagram"></i>  Instagram</th>
-              <a *ngIf="venue?.instagram" href="https://instagram.com/{{ venue?.instagram }}" target="_blank">
-                {{ venue?.instagram }}
-              </a>
-              <span *ngIf="!venue?.instagram">No disponible</span>
+              <td>
+                <a *ngIf="venue?.instagram" href="https://instagram.com/{{ venue?.instagram }}" target="_blank">
+                  {{ venue?.instagram }}
+                </a>
+                <span *ngIf="!venue?.instagram">No disponible</span>
+              </td>
             </tr>
             <tr>
               <th>🏳️‍🌈 LGTB Friendly</th>

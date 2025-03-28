@@ -6,10 +6,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto"> 
-        <li class="nav-item" *ngIf="isAuthenticated$ | async">
+        <li class="nav-item" *ngIf="!(isOwner$ | async)">
           <a class="nav-link" routerLink="venues">
             <mat-icon>location_city</mat-icon>
             Venues
+          </a>
+        </li>
+         <!-- Mostrar solo si el usuario es OWNER -->
+         <li class="nav-item" *ngIf="isOwner$ | async">
+          <a class="nav-link" routerLink="myvenues">
+            <mat-icon>store</mat-icon>
+            My Venues
           </a>
         </li>
       </ul>

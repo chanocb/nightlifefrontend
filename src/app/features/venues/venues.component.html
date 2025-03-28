@@ -1,11 +1,6 @@
 <div class="container mt-4">
     <h2 class="text-center">Locales ({{ (venues$ | async)?.length }} encontrados)</h2>
 
-    <button *ngIf="isOwner" (click)="create()" mat-raised-button color="primary" class="mb-3 mat-button-base d-flex align-items-center">
-        <mat-icon class="mr-2">add_circle</mat-icon>
-        <span>Crear Venue</span>
-    </button>
-
     <div class="row">
         <div class="col-md-4 mb-3" *ngFor="let venue of (venues$ | async)">
             <mat-card 

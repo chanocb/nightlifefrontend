@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
-import { VenueCreateDialogComponent } from './venue-creation-dialog.component';
 import { Venue } from '../shared/models/venue.model';
 import { VenueHomeService } from './venue-home.service';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
@@ -31,11 +30,6 @@ export class VenuesComponent implements OnInit{
     this.venueService.getVenues().subscribe((venues) => {
       console.log('Datos de venues:', venues);  // Verifica si reference está presente
     });
-  }
-
-  create(): void {
-    this.dialog.open(VenueCreateDialogComponent).afterClosed();
-    console.log('Create venue');
   }
 
   goToDetails(reference: string): void {
