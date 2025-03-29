@@ -6,7 +6,7 @@ import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
-import { Venue } from '../shared/models/venue.model';
+import { Venue } from '../../../../core/models/venue.model';
 
 @Component({
   standalone: true,
@@ -15,7 +15,7 @@ import { Venue } from '../shared/models/venue.model';
     MatDialogTitle, MatInput, MatButton, MatCheckbox, CommonModule, MatDialogContent
   ],
   templateUrl: './venue-edit-dialog.component.html',
-  styleUrls: ['./venues.component.css']
+  styleUrls: ['../../venues.component.css']
 })
 export class VenueEditDialogComponent{
   venue: Venue;

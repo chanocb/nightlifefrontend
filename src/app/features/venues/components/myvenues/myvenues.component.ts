@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { VenueHomeService } from './venue-home.service';
-import { Venue } from '../shared/models/venue.model';
+import { VenueHomeService } from '../../../../core/services/venue-home.service';
+import { Venue } from '../../../../core/models/venue.model';
 import {  ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { VenueCreateDialogComponent } from './venue-creation-dialog.component';
+import { VenueCreateDialogComponent } from '../../dialogs/creation/venue-creation-dialog.component';
 import { BehaviorSubject, of, switchMap } from 'rxjs';
-import { ConfirmDialogComponent } from './venue-confirm-dialog.component';
-import { VenueEditDialogComponent } from './venue-edit-dialog.component';
+import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
+import { VenueEditDialogComponent } from '../../dialogs/edit/venue-edit-dialog.component';
 
 
 @Component({

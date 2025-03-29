@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { VenueHomeService } from './venue-home.service';
-import { Venue } from '../shared/models/venue.model';
+import { VenueHomeService } from '../../../../core/services/venue-home.service';
+import { Venue } from '../../../../core/models/venue.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
@@ -8,7 +8,7 @@ import { NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from './venue-confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
 
 
 @Component({

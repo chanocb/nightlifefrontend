@@ -3,7 +3,7 @@ import {BehaviorSubject, Observable, of, tap} from 'rxjs';
 
 import {HttpService} from '@core/services/http.service';
 
-import { Venue } from '../shared/models/venue.model';
+import { Venue } from '../models/venue.model';
 import { environment } from '@env';
 
 @Injectable({providedIn: 'root'})

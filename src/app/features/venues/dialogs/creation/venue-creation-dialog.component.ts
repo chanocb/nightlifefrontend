@@ -6,7 +6,7 @@ import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
-import { VenueHomeService } from './venue-home.service';
+import { VenueHomeService } from '../../../../core/services/venue-home.service';
 import { User } from '@core/models/user.model';
 import { AuthService } from '@core/services/auth.service';
 
@@ -17,7 +17,7 @@ import { AuthService } from '@core/services/auth.service';
     MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule, MatDialogContent
   ],
   templateUrl: './venue-creation-dialog.component.html',
-  styleUrls: ['./venues.component.css']
+  styleUrls: ['../../venues.component.css']
 })
 export class VenueCreateDialogComponent {
   venueForm: FormGroup;
