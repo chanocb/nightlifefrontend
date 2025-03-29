@@ -7,4 +7,5 @@ export interface Venue {
     LGTBFriendly: boolean;
     instagram: string;
     user: User;
+    imageUrl:string;
   }

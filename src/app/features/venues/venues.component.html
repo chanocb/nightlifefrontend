@@ -1,26 +1,14 @@
 <div class="container mt-4">
     <h2 class="text-center">Locales ({{ (venues$ | async)?.length }} encontrados)</h2>
-
+  
     <div class="row">
-        <div class="col-md-4 mb-3" *ngFor="let venue of (venues$ | async)">
-            <mat-card 
-                (click)="goToDetails(venue.reference)" 
-                class="mat-elevation-z4 clickable-card">
-                <mat-card-header>
-                    <mat-card-title>{{ venue.name }}</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <p><strong>📞 Teléfono:</strong> {{ venue.phone }}</p>
-                    <p>
-                        <strong><i class="fab fa-instagram"></i> Instagram:</strong> 
-                        <a *ngIf="venue.instagram" [href]="'https://instagram.com/' + venue.instagram" target="_blank">
-                            {{ venue.instagram }}
-                        </a>
-                        <span *ngIf="!venue.instagram">No disponible</span>
-                    </p>
-                    <p><strong>🏳️‍🌈 LGTB Friendly:</strong> {{ venue.LGTBFriendly ? 'Sí' : 'No' }}</p>
-                </mat-card-content>
-            </mat-card>
+      <div class="col-md-4 mb-3" *ngFor="let venue of (venues$ | async)">
+        <div class="card h-100" (click)="goToDetails(venue.reference)">
+          <img [src]="venue.imageUrl" alt="Imagen de {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ venue.name }}</h5>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>

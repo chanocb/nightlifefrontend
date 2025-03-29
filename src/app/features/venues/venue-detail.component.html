@@ -1,24 +1,20 @@
 <div class="container mt-4">
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-      <h2 class="mb-0">Detalles del Venue</h2>
+    <div class="card-header text-dark d-flex align-items-center">
+      <img *ngIf="venue?.imageUrl" [src]="venue?.imageUrl" class="rounded-circle" alt="Imagen del venue" style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+      <h2 class="mb-0">{{ venue?.name }}</h2>
     </div>
+
     <div class="card-body">
-      
-      <!-- Modo Visualización -->
       <div *ngIf="!isEditing; else editForm">
         <table class="table table-striped">
           <tbody>
             <tr>
-              <th>Nombre</th>
-              <td>{{ venue?.name }}</td>
-            </tr>
-            <tr>
-              <th><mat-icon>phone</mat-icon>Teléfono</th>
+              <th>Teléfono</th>
               <td>{{ venue?.phone }}</td>
             </tr>
             <tr>
-              <th><i class="fab fa-instagram"></i>  Instagram</th>
+              <th><i class="fab fa-instagram"></i> Instagram</th>
               <td>
                 <a *ngIf="venue?.instagram" href="https://instagram.com/{{ venue?.instagram }}" target="_blank">
                   {{ venue?.instagram }}
@@ -30,19 +26,15 @@
               <th>🏳️‍🌈 LGTB Friendly</th>
               <td>{{ venue?.LGTBFriendly ? 'Sí' : 'No' }}</td>
             </tr>
-            
           </tbody>
         </table>
-        
-        <!-- Mostrar botón de editar solo si el usuario es un OWNER -->
-        <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()"><mat-icon>edit</mat-icon>Editar</button>
-        <!-- Botón de Eliminar -->
-        <button *ngIf="isOwner" class="btn btn-danger" (click)="deleteVenue()">
-          <mat-icon>delete</mat-icon> Eliminar
-        </button>
+
+        <div class="d-flex justify-content-start gap-2">
+          <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()">Editar</button>
+          <button *ngIf="isOwner" class="btn btn-danger" (click)="deleteVenue()">Eliminar</button>
+        </div>
       </div>
 
-      <!-- Modo Edición -->
       <ng-template #editForm>
         <form [formGroup]="venueForm" (ngSubmit)="saveVenue()">
           <div class="mb-3">
@@ -62,13 +54,7 @@
 
           <div class="mb-3">
             <label for="LGTBFriendly" class="form-label">🏳️‍🌈 LGTB Friendly</label>
-            <!-- El checkbox se controla mediante el formControlName, desmarcado si LGTBFriendly es falso -->
-            <mat-checkbox 
-              formControlName="LGTBFriendly"
-              [checked]="venue?.LGTBFriendly" 
-              [disabled]="!isEditing">
-              
-            </mat-checkbox>
+            <mat-checkbox formControlName="LGTBFriendly" [checked]="venue?.LGTBFriendly" [disabled]="!isEditing"></mat-checkbox>
           </div>
 
           <div class="d-flex justify-content-end gap-2">

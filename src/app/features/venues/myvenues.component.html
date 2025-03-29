@@ -16,6 +16,7 @@
           <th scope="col">Teléfono</th>
           <th scope="col">Es LGBT</th>
           <th scope="col">Instagram</th>
+          <th scope="col">Imagen</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
@@ -30,8 +31,14 @@
             </a>
             <span *ngIf="!venue.instagram">No disponible</span>
           </td>
+          <td>
+            <a *ngIf="venue.imageUrl" [href]="venue.imageUrl" target="_blank">
+              link
+            </a>
+            <span *ngIf="!venue.imageUrl">No disponible</span>
+          </td>
           <td class="text-center">
-            <button mat-icon-button color="accent" class="mr-2"  (click)="openEditDialog(venue)">
+            <button mat-icon-button color="accent" class="mr-2" (click)="openEditDialog(venue)">
               <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="openDeleteDialog(venue)">

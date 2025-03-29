@@ -19,45 +19,48 @@ import { AuthService } from '@core/services/auth.service';
   templateUrl: './venue-creation-dialog.component.html',
   styleUrls: ['./venues.component.css']
 })
-export class VenueCreateDialogComponent{
-    venueForm: FormGroup;
-    user: User | null = null;
+export class VenueCreateDialogComponent {
+  venueForm: FormGroup;
+  user: User | null = null;
+  imageUrlPreview: string | undefined;
 
-    constructor(
-      private readonly fb: FormBuilder,
-      private readonly dialog: MatDialogRef<VenueCreateDialogComponent>,private readonly venueHomeService: VenueHomeService, private authService: AuthService
-    ) {
-      this.venueForm = this.fb.group({
-        name: ['', [Validators.required]],
-        phone: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
-        LGTBFriendly: [false],
-        instagram: ['']
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly dialog: MatDialogRef<VenueCreateDialogComponent>,
+    private readonly venueHomeService: VenueHomeService, 
+    private authService: AuthService
+  ) {
+    this.venueForm = this.fb.group({
+      name: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
+      LGTBFriendly: [false],
+      instagram: [''],
+      imageUrl: ['', [Validators.required]]
+    });
+
+    const userEmail = this.authService.getUserEmail();
+    if (userEmail) {
+      this.authService.getProfile().subscribe({
+        next: (user) => {
+          this.user = user;
+        }
       });
+    } else {
+      console.error('Usuario no autenticado');
+    }
+  }
 
-      // Obtener el usuario logueado al iniciar el componente
-      const userEmail = this.authService.getUserEmail();
-      if (userEmail) {
-        this.authService.getProfile().subscribe({
-          next: (user) => {
-            this.user = user; // Almacenar el usuario logueado
-          }
-          
-        });
-      } else {
-        console.error('Usuario no autenticado');
-      }
+  onImageUrlChange(url: string): void {
+    this.imageUrlPreview = url;
+  }
+
+  create(): void {
+    if (this.venueForm.valid && this.user) {
+      const venueData = this.venueForm.value;
+      venueData.user = this.user;
+      this.venueHomeService.create(venueData).subscribe(() => {
+        this.dialog.close();
+      });
     }
-  
-  
-    create(): void {
-      console.log('Creando el venue...', this.user);
-      if (this.venueForm.valid && this.user) {
-        const venueData = this.venueForm.value;
-        venueData.user = this.user;
-        console.log('Datos del venue:', venueData);
-        this.venueHomeService.create(venueData).subscribe(() => {
-          this.dialog.close();
-        });
-      }
-    }
+  }
 }

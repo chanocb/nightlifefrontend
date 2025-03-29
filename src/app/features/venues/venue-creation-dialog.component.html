@@ -2,7 +2,6 @@
 
 <mat-dialog-content style="display: flex; flex-direction: column; gap: 22px; width: 100%; max-width: 400px;">
   <form [formGroup]="venueForm" style="display: flex; flex-direction: column; gap: 22px; margin-top: 10px;">
-    <!-- Nombre -->
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="name" required>
@@ -11,7 +10,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Teléfono -->
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Teléfono</mat-label>
       <input matInput type="tel" formControlName="phone" required maxlength="9">
@@ -23,14 +21,24 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Instagram -->
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Instagram</mat-label>
       <input matInput type="text" formControlName="instagram">
     </mat-form-field>
 
-    <!-- Checkbox LGTB Friendly -->
     <mat-checkbox formControlName="LGTBFriendly">LGTB Friendly</mat-checkbox>
+
+    <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
+      <mat-label>URL de la Imagen</mat-label>
+      <input matInput formControlName="imageUrl" (input)="onImageUrlChange(venueForm.get('imageUrl')?.value)">
+      <mat-error *ngIf="venueForm.get('imageUrl')?.hasError('required')">
+        La URL de la imagen es obligatoria.
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="imageUrlPreview">
+      <img [src]="imageUrlPreview" alt="Previsualización de la imagen" style="max-width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;" />
+    </div>
   </form>
 </mat-dialog-content>
 

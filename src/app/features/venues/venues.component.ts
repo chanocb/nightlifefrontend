@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-venues',
-  imports: [CommonModule, MatIconModule, MatCard, MatCardHeader, MatCardTitle, MatCardContent],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './venues.component.html',
   styleUrl: './venues.component.css'
 })

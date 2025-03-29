@@ -4,16 +4,25 @@
     <mat-label>Nombre</mat-label>
     <input matInput [(ngModel)]="venue.name" />
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Teléfono</mat-label>
     <input matInput [(ngModel)]="venue.phone" />
   </mat-form-field>
+
   <mat-checkbox [(ngModel)]="venue.LGTBFriendly">Es LGBT Friendly</mat-checkbox>
+
   <mat-form-field appearance="fill">
     <mat-label>Instagram</mat-label>
     <input matInput [(ngModel)]="venue.instagram" />
   </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Imagen URL</mat-label>
+    <input matInput [(ngModel)]="venue.imageUrl" />
+  </mat-form-field>
 </mat-dialog-content>
+
 <mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancelar</button>
   <button mat-button (click)="onSave()" color="primary">Guardar</button>
