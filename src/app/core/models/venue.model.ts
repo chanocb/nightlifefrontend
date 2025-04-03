@@ -1,4 +1,5 @@
 import { User } from "@core/models/user.model";
+import { Music } from "./music.model";
 
 export interface Venue {
   reference: string; 
@@ -8,4 +9,5 @@ export interface Venue {
     instagram: string;
     user: User;
     imageUrl:string;
+    musicGenres: Music[];
   }

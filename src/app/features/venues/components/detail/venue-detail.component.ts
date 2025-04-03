@@ -16,7 +16,7 @@ import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dial
   standalone: true,
   imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule],
   templateUrl: './venue-detail.component.html',
-  styleUrls: ['./venues.component.css'],
+  styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VenueDetailComponent implements OnInit {

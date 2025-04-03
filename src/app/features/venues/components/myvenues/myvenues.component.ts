@@ -18,7 +18,7 @@ import { VenueEditDialogComponent } from '../../dialogs/edit/venue-edit-dialog.c
   standalone: true,
   imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule],
   templateUrl: './myvenues.component.html',
-  styleUrls: ['./venues.component.css'],
+  styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyVenuesComponent implements OnInit {
