@@ -21,6 +21,15 @@
     <mat-label>Imagen URL</mat-label>
     <input matInput [(ngModel)]="venue.imageUrl" />
   </mat-form-field>
+
+  <div style="width: 100%; margin-top: 10px;">
+    <mat-label>Géneros Musicales</mat-label>
+    <div *ngFor="let genre of musicGenres; let i = index" style="margin-bottom: 5px;">
+      <mat-checkbox [formControl]="musicGenresControls.at(i)">
+        {{ genre }}
+      </mat-checkbox>
+    </div>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>

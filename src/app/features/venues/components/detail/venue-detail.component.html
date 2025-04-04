@@ -10,7 +10,7 @@
         <table class="table table-striped">
           <tbody>
             <tr>
-              <th>Teléfono</th>
+              <th>📞Teléfono</th>
               <td>{{ venue?.phone }}</td>
             </tr>
             <tr>
@@ -25,6 +25,12 @@
             <tr>
               <th>🏳️‍🌈 LGTB Friendly</th>
               <td>{{ venue?.LGTBFriendly ? 'Sí' : 'No' }}</td>
+            </tr>
+            <tr>
+              <th>🎵 Géneros Musicales</th>
+              <td>
+                {{ venue?.musicGenres?.length ? venue!.musicGenres.join(', ') : 'No disponible' }}
+              </td>
             </tr>
           </tbody>
         </table>

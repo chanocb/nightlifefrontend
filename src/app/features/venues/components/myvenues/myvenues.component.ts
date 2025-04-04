@@ -83,6 +83,7 @@ export class MyVenuesComponent implements OnInit {
         console.error('Error al actualizar el venue', err);
       }
     });
+    console.log('Nuevo Venue', updatedVenue);
   }
 
   openDeleteDialog(venue: Venue): void {
@@ -110,5 +111,13 @@ export class MyVenuesComponent implements OnInit {
       }
     });
   }
+
+  getMusicGenres(venue: Venue): string {
+    return venue.musicGenres && venue.musicGenres.length
+      ? venue.musicGenres.join(', ')
+      : 'No disponible';
+  }
   
 }
+
+

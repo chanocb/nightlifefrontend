@@ -4,7 +4,7 @@ import { Venue } from '../../../../core/models/venue.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dial
 @Component({
   selector: 'app-venue-detail',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule],
   templateUrl: './venue-detail.component.html',
   styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -125,6 +125,12 @@ export class VenueDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  getMusicGenres(venue: Venue): string {
+    return venue.musicGenres && venue.musicGenres.length
+      ? venue.musicGenres.join(', ')
+      : 'No disponible';
   }
   
    

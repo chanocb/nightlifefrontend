@@ -17,6 +17,7 @@
           <th scope="col">Es LGBT</th>
           <th scope="col">Instagram</th>
           <th scope="col">Imagen</th>
+          <th scope="col">Géneros Musicales</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
@@ -36,6 +37,14 @@
               link
             </a>
             <span *ngIf="!venue.imageUrl">No disponible</span>
+          </td>
+          <td>
+            <ng-container *ngIf="venue.musicGenres.length > 0; else noGenres">
+              {{ venue.musicGenres.join(', ') }}
+            </ng-container>
+            <ng-template #noGenres>
+              <span>No disponible</span>
+            </ng-template>
           </td>
           <td class="text-center">
             <button mat-icon-button color="accent" class="mr-2" (click)="openEditDialog(venue)">
