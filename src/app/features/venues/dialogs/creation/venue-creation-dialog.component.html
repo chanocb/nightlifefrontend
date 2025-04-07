@@ -55,6 +55,30 @@
     <div *ngIf="imageUrlPreview">
       <img [src]="imageUrlPreview" alt="Previsualización de la imagen" style="max-width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;" />
     </div>
+
+    <div formArrayName="drinks">
+      <mat-label>Bebidas</mat-label>
+    
+      <div *ngFor="let drink of drinks.controls; let i = index" [formGroupName]="i" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+        <mat-form-field appearance="outline" style="flex: 1;">
+          <mat-label>Nombre de la bebida</mat-label>
+          <input matInput formControlName="name" placeholder="Ej: Cerveza">
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline" style="width: 100px;">
+          <mat-label>Precio</mat-label>
+          <input matInput type="number" formControlName="price" placeholder="€">
+        </mat-form-field>
+    
+        <button mat-icon-button color="warn" (click)="removeDrink(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    
+      <button mat-stroked-button color="accent" (click)="addDrink()" type="button">
+        Añadir bebida
+      </button>
+    </div>
   </form>
 </mat-dialog-content>
 

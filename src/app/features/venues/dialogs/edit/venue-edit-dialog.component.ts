@@ -35,6 +35,11 @@ export class VenueEditDialogComponent{
     );
   }
 
+  addProduct(): void {
+    const newProduct = { name: '', price: 0 }; // Producto vacío
+    this.venue.products.push(newProduct);
+  }
+
   onSave(): void {
     this.venue.musicGenres = this.musicGenresControls.controls
       .map((control, index) => control.value ? this.musicGenres[index] : null)

@@ -10,12 +10,13 @@ import { VenueHomeService } from '../../../../core/services/venue-home.service';
 import { User } from '@core/models/user.model';
 import { AuthService } from '@core/services/auth.service';
 import { Music } from '@core/models/music.model';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule, MatDialogContent
+    MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule, MatDialogContent, MatIcon
   ],
   templateUrl: './venue-creation-dialog.component.html',
   styleUrls: ['../../venues.component.css']
@@ -39,7 +40,8 @@ export class VenueCreateDialogComponent {
       LGTBFriendly: [false],
       instagram: [''],
       musicGenres: this.fb.array([]),
-      imageUrl: ['', [Validators.required]]
+      imageUrl: ['', [Validators.required]],
+      drinks: this.fb.array([])
     });
 
     this.musicGenres.forEach(() => {
@@ -60,6 +62,22 @@ export class VenueCreateDialogComponent {
     }
   }
 
+  get drinks(): FormArray {
+    return this.venueForm.get('drinks') as FormArray;
+  }
+
+  addDrink() {
+    const drinkForm = this.fb.group({
+      name: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(0)]]
+    });
+    this.drinks.push(drinkForm);
+  }
+  
+  removeDrink(index: number) {
+    this.drinks.removeAt(index);
+  }
+
   get musicGenresControls() {
     return (this.venueForm.get('musicGenres') as FormArray).controls as FormControl[];
   }
@@ -77,11 +95,15 @@ export class VenueCreateDialogComponent {
       })
       .filter((genre) => genre !== null);  // Filtrar los valores nulos
 
+      const rawDrinks = this.drinks.controls.map(control => control.value);
+
     const venueData = {
       ...this.venueForm.value,
       musicGenres: selectedGenres as Music[],  // Los géneros seleccionados
+      products: rawDrinks,
       user: this.user
     };
+    console.log('Datos del local:', venueData);
       this.venueHomeService.create(venueData).subscribe(() => {
         this.dialog.close();
       });

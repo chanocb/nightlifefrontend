@@ -1,5 +1,6 @@
 import { User } from "@core/models/user.model";
 import { Music } from "./music.model";
+import { Product } from "./product.model";
 
 export interface Venue {
   reference: string; 
@@ -10,4 +11,5 @@ export interface Venue {
     user: User;
     imageUrl:string;
     musicGenres: Music[];
+    products: Product[];
   }

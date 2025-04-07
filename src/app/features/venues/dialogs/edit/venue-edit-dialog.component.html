@@ -30,6 +30,23 @@
       </mat-checkbox>
     </div>
   </div>
+
+  <div style="width: 100%; margin-top: 10px;">
+    <mat-label>Productos</mat-label>
+    <button mat-button (click)="addProduct()">Agregar Producto</button>
+    <div *ngFor="let product of venue.products; let i = index" style="margin-bottom: 10px;">
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Nombre del producto</mat-label>
+        <input matInput [(ngModel)]="venue.products[i].name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Precio</mat-label>
+        <input matInput type="number" [(ngModel)]="venue.products[i].price" />
+      </mat-form-field>
+      
+    </div>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
