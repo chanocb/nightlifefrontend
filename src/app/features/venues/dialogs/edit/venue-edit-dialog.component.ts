@@ -8,13 +8,13 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
 import { Venue } from '../../../../core/models/venue.model';
 import { Music } from '@core/models/music.model';
-import { MatOption } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatButton, MatCheckbox, CommonModule, MatDialogContent, MatOption
+    MatDialogTitle, MatInput, MatButton, MatCheckbox, CommonModule, MatDialogContent, MatIconModule
   ],
   templateUrl: './venue-edit-dialog.component.html',
   styleUrls: ['../../venues.component.css']
@@ -36,11 +36,22 @@ export class VenueEditDialogComponent{
   }
 
   addProduct(): void {
-    const newProduct = { name: '', price: 0 }; // Producto vacío
+    const newProduct = { name: '', price: 0 }; 
     this.venue.products.push(newProduct);
   }
 
+  removeProduct(index: number) {
+    this.venue.products.splice(index, 1);
+  }
+
+  validatePrice(index: number): void {
+    if (this.venue.products[index].price < 0) {
+      this.venue.products[index].price = 0;
+    }
+  }
+
   onSave(): void {
+    this.venue.products = this.venue.products.filter(product => product.name.trim() !== '');
     this.venue.musicGenres = this.musicGenresControls.controls
       .map((control, index) => control.value ? this.musicGenres[index] : null)
       .filter((genre) => genre !== null) as Music[];

@@ -34,17 +34,25 @@
   <div style="width: 100%; margin-top: 10px;">
     <mat-label>Productos</mat-label>
     <button mat-button (click)="addProduct()">Agregar Producto</button>
-    <div *ngFor="let product of venue.products; let i = index" style="margin-bottom: 10px;">
-      <mat-form-field appearance="fill" style="width: 100%;">
-        <mat-label>Nombre del producto</mat-label>
-        <input matInput [(ngModel)]="venue.products[i].name" />
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" style="width: 100%;">
-        <mat-label>Precio</mat-label>
-        <input matInput type="number" [(ngModel)]="venue.products[i].price" />
-      </mat-form-field>
-      
+    <div *ngFor="let product of venue.products; let i = index" style="margin-bottom: 10px; position: relative; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background-color: #f9f9f9;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="flex: 1;">
+          <mat-form-field appearance="fill" style="width: 45%; margin-right: 10px;">
+            <mat-label>Nombre del producto</mat-label>
+            <input matInput [(ngModel)]="venue.products[i].name" />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" style="width: 45%;">
+            <mat-label>Precio</mat-label>
+            <input matInput type="number" [(ngModel)]="venue.products[i].price" min="0" (input)="validatePrice(i)"/>
+          </mat-form-field>
+        </div>
+  
+        <button mat-icon-button color="warn" (click)="removeProduct(i)" 
+                style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: #fff; border-radius: 50%; padding: 5px;">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </mat-dialog-content>
