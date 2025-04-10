@@ -18,6 +18,7 @@
           <th scope="col">Instagram</th>
           <th scope="col">Imagen</th>
           <th scope="col">Géneros Musicales</th>
+          <th scope="col">Coordenadas</th> <!-- Nueva columna para las coordenadas -->
           <th scope="col">Acciones</th>
         </tr>
       </thead>
@@ -45,6 +46,13 @@
             <ng-template #noGenres>
               <span>No disponible</span>
             </ng-template>
+          </td>
+          <!-- Nueva columna para mostrar las coordenadas -->
+          <td>
+            <span *ngIf="venue.coordinate">
+              Lat: {{ venue.coordinate.latitude }}, Long: {{ venue.coordinate.longitude }}
+            </span>
+            <span *ngIf="!venue.coordinate">No disponible</span>
           </td>
           <td class="text-center">
             <button mat-icon-button color="accent" class="mr-2" (click)="openEditDialog(venue)">

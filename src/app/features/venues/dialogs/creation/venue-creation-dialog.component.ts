@@ -11,7 +11,6 @@ import { User } from '@core/models/user.model';
 import { AuthService } from '@core/services/auth.service';
 import { Music } from '@core/models/music.model';
 import { MatIcon } from '@angular/material/icon';
-
 @Component({
   standalone: true,
   imports: [
@@ -25,7 +24,7 @@ export class VenueCreateDialogComponent {
   venueForm: FormGroup;
   user: User | null = null;
   imageUrlPreview: string | undefined;
-  musicGenres: string[] = Object.values(Music)
+  musicGenres: string[] = Object.values(Music);
   
 
   constructor(
@@ -41,14 +40,16 @@ export class VenueCreateDialogComponent {
       instagram: [''],
       musicGenres: this.fb.array([]),
       imageUrl: ['', [Validators.required]],
-      drinks: this.fb.array([])
+      drinks: this.fb.array([]),
+      coordinate: this.fb.group({
+        latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],  // Agregado Validators.min y Validators.max
+        longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]]  // Igual para longitud
+      })
     });
 
     this.musicGenres.forEach(() => {
       (this.venueForm.get('musicGenres') as FormArray).push(this.fb.control(false));  // Usamos `push` para agregar controles
     });
-
-    
 
     const userEmail = this.authService.getUserEmail();
     if (userEmail) {
@@ -81,7 +82,6 @@ export class VenueCreateDialogComponent {
   get musicGenresControls() {
     return (this.venueForm.get('musicGenres') as FormArray).controls as FormControl[];
   }
-  
 
   onImageUrlChange(url: string): void {
     this.imageUrlPreview = url;
@@ -90,20 +90,24 @@ export class VenueCreateDialogComponent {
   create(): void {
     if (this.venueForm.valid && this.user) {
       const selectedGenres = this.musicGenres
-      .map((genre, index) => {
-        return this.musicGenresControls[index].value ? genre : null;  // Usar el índice correctamente
-      })
-      .filter((genre) => genre !== null);  // Filtrar los valores nulos
+        .map((genre, index) => {
+          return this.musicGenresControls[index].value ? genre : null;  // Usar el índice correctamente
+        })
+        .filter((genre) => genre !== null);  // Filtrar los valores nulos
 
       const rawDrinks = this.drinks.controls.map(control => control.value);
 
-    const venueData = {
-      ...this.venueForm.value,
-      musicGenres: selectedGenres as Music[],  // Los géneros seleccionados
-      products: rawDrinks,
-      user: this.user
-    };
-    console.log('Datos del local:', venueData);
+      // Crear la data para el backend
+      const venueData = {
+        ...this.venueForm.value,
+        musicGenres: selectedGenres as Music[],  // Los géneros seleccionados
+        products: rawDrinks,
+        user: this.user
+      };
+
+      console.log('Datos del local:', venueData);
+
+      // Llamar al backend para crear el local
       this.venueHomeService.create(venueData).subscribe(() => {
         this.dialog.close();
       });

@@ -3,7 +3,6 @@
 <mat-dialog-content style="display: flex; flex-direction: column; gap: 22px; width: 100%; max-width: 400px;">
   <form [formGroup]="venueForm" style="display: flex; flex-direction: column; gap: 22px; margin-top: 10px;">
     
-    
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="name" required>
@@ -12,7 +11,6 @@
       </mat-error>
     </mat-form-field>
 
-    
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Teléfono</mat-label>
       <input matInput type="tel" formControlName="phone" required maxlength="9">
@@ -24,13 +22,11 @@
       </mat-error>
     </mat-form-field>
 
-    
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>Instagram</mat-label>
       <input matInput type="text" formControlName="instagram">
     </mat-form-field>
 
-    
     <mat-checkbox formControlName="LGTBFriendly">LGTB Friendly</mat-checkbox>
 
     <div style="width: 100%; margin-top: 10px;">
@@ -41,9 +37,7 @@
         </mat-checkbox>
       </div>
     </div>
-   
 
-    
     <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
       <mat-label>URL de la Imagen</mat-label>
       <input matInput formControlName="imageUrl" (input)="onImageUrlChange(venueForm.get('imageUrl')?.value)">
@@ -58,26 +52,46 @@
 
     <div formArrayName="drinks">
       <mat-label>Bebidas</mat-label>
-    
       <div *ngFor="let drink of drinks.controls; let i = index" [formGroupName]="i" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
         <mat-form-field appearance="outline" style="flex: 1;">
           <mat-label>Nombre de la bebida</mat-label>
           <input matInput formControlName="name" placeholder="Ej: Cerveza">
         </mat-form-field>
-    
+
         <mat-form-field appearance="outline" style="width: 100px;">
           <mat-label>Precio</mat-label>
           <input matInput type="number" formControlName="price" placeholder="€">
         </mat-form-field>
-    
+
         <button mat-icon-button color="warn" (click)="removeDrink(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-    
+
       <button mat-stroked-button color="accent" (click)="addDrink()" type="button">
         Añadir bebida
       </button>
+    </div>
+
+    <!-- Coordenadas -->
+    <div formGroupName="coordinate" style="display: flex; flex-direction: column; gap: 16px;">
+      <mat-label>Coordenadas</mat-label>
+
+      <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
+        <mat-label>Latitud</mat-label>
+        <input matInput type="number" formControlName="latitude">
+        <mat-error *ngIf="venueForm.get('coordinate.latitude')?.hasError('required')">
+          Latitud obligatoria.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always" style="width: 100%;">
+        <mat-label>Longitud</mat-label>
+        <input matInput type="number" formControlName="longitude">
+        <mat-error *ngIf="venueForm.get('coordinate.longitude')?.hasError('required')">
+          Longitud obligatoria.
+        </mat-error>
+      </mat-form-field>
     </div>
   </form>
 </mat-dialog-content>

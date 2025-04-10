@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Editar Venue</h2>
+
 <mat-dialog-content>
   <mat-form-field appearance="fill">
     <mat-label>Nombre</mat-label>
@@ -41,13 +42,13 @@
             <mat-label>Nombre del producto</mat-label>
             <input matInput [(ngModel)]="venue.products[i].name" />
           </mat-form-field>
-  
+
           <mat-form-field appearance="fill" style="width: 45%;">
             <mat-label>Precio</mat-label>
             <input matInput type="number" [(ngModel)]="venue.products[i].price" min="0" (input)="validatePrice(i)"/>
           </mat-form-field>
         </div>
-  
+
         <button mat-icon-button color="warn" (click)="removeProduct(i)" 
                 style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: #fff; border-radius: 50%; padding: 5px;">
           <mat-icon>close</mat-icon>
@@ -55,6 +56,22 @@
       </div>
     </div>
   </div>
+
+  <!-- Coordenadas -->
+  <div style="width: 100%; margin-top: 10px;">
+    <mat-label>Coordenadas</mat-label>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Latitud</mat-label>
+      <input matInput type="number" [(ngModel)]="venue.coordinate.latitude" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Longitud</mat-label>
+      <input matInput type="number" [(ngModel)]="venue.coordinate.longitude" />
+    </mat-form-field>
+  </div>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>
