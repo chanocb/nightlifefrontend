@@ -1,18 +1,20 @@
 <main class="container mt-5">
-  <div class="row justify-content-center">
+  <div class="row">
     <div class="col-md-8">
-      <div class="card shadow-lg mb-5">
-        <div class="card-body text-center">
-          <h2 class="card-title mb-4">Bienvenido a Nightlife</h2>
-          <p class="card-text mb-4">¡Gracias por visitar nuestra página! Aquí podrás registrarte, conocer los eventos más recientes y mucho más.</p>
-          <p class="card-text mb-5">¡Esperamos que disfrutes tu experiencia con nosotros!</p>
-          <!-- Mostrar solo si el usuario NO está autenticado -->
-          <div *ngIf="!(isAuthenticated$ | async)">
-            <a routerLink="/register" class="btn btn-primary me-3">Registrarse</a>
-            <a routerLink="/login" class="btn btn-secondary me-3">Login</a>
+      <h2 class="text-center">Locales ({{ (venues$ | async)?.length }} encontrados)</h2>
+      <div class="row">
+        <div class="col-md-6 mb-3" *ngFor="let venue of (venues$ | async)">
+          <div class="card h-100" (click)="goToDetails(venue.reference)">
+            <img [src]="venue.imageUrl" alt="Imagen de {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title text-center">{{ venue.name }}</h5>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="col-md-4 d-flex align-items-stretch">
+      <app-map [venues]="(venues$ | async) || []" class="w-100" style="height: 600px;"></app-map>
     </div>
   </div>
 </main>

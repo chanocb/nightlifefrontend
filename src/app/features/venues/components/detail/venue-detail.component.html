@@ -96,3 +96,7 @@
     </div>
   </div>
 </div>
+
+<div class="mt-4" *ngIf="venue && venue.coordinate">
+  <app-map [venues]="[venue]" class="w-100" style="height: 300px;"></app-map>
+</div>

@@ -9,12 +9,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
+import { MapComponent } from '../../../map/map.component';
 
 
 @Component({
   selector: 'app-venue-detail',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MapComponent],
   templateUrl: './venue-detail.component.html',
   styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
