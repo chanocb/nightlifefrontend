@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { VenueHomeService } from '../../../../core/services/venue-home.service';
 import { Venue } from '../../../../core/models/venue.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -10,12 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
 import { MapComponent } from '../../../map/map.component';
+import { Review } from '@core/models/review.model';
+import { ReviewService } from '@core/services/review.service';
 
 
 @Component({
   selector: 'app-venue-detail',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MapComponent],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MapComponent, FormsModule],
   templateUrl: './venue-detail.component.html',
   styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,9 +29,18 @@ export class VenueDetailComponent implements OnInit {
   isOwner = false; // Para verificar si el usuario es un OWNER
   error: string | null = null;
 
+  reviewTitle: string = '';
+  rating: number = 1;
+  reviewOpinion: string = '';
+  stars = [1, 2, 3, 4, 5];
+  tempRating: number | null = null;
+
+  reviews: Review[] = [];
+
   constructor(
     private authService: AuthService,
     private venueService: VenueHomeService,
+    private reviewService: ReviewService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
@@ -57,6 +68,16 @@ export class VenueDetailComponent implements OnInit {
           const userEmail = this.authService.getUserEmail();
           this.isOwner = this.authService.isOwner() && venue.user.email === userEmail;
           this.cdRef.markForCheck();
+
+          this.reviewService.getReviewsByVenueId(reference).subscribe({
+            next: (reviews) => {
+              this.reviews = reviews;
+              this.cdRef.markForCheck();
+            },
+            error: (error) => {
+              console.error('🔴 Error al cargar las reseñas:', error);
+            }
+          });
         },
         error: (error) => {
           this.error = 'Error al cargar el venue.';
@@ -132,6 +153,47 @@ export class VenueDetailComponent implements OnInit {
     return venue.musicGenres && venue.musicGenres.length
       ? venue.musicGenres.join(', ')
       : 'No disponible';
+  }
+
+  setRating(rating: number): void {
+    this.rating = rating;
+  }
+
+  submitReview(): void {
+    if (this.reviewTitle && this.reviewOpinion && this.rating && this.venue) {
+      this.authService.getProfile().subscribe({
+        next: (user) => {
+          const review: Review = {
+            title: this.reviewTitle,
+            opinion: this.reviewOpinion,
+            rating: this.rating,
+            user,
+            venue: this.venue!
+          };
+  
+          this.reviewService.createReview(review).subscribe({
+            next: (response) => {
+              console.log('🟢 Reseña guardada correctamente', response);
+              // Limpiar los campos después de enviar la reseña
+              this.reviewTitle = '';
+              this.reviewOpinion = '';
+              this.rating = 5;
+              this.cdRef.markForCheck();
+              this.reviews = [...this.reviews, response];
+              //this.reviews.push(response); // Agregar la nueva reseña a la lista
+            },
+            error: (error) => {
+              this.error = 'Error al enviar la reseña.';
+              console.error('🔴 Error al enviar la reseña:', error);
+            }
+          });
+        },
+        error: (error) => {
+          this.error = 'Error al obtener el perfil del usuario.';
+          console.error('🔴 Error al obtener perfil:', error);
+        }
+      });
+    }
   }
   
    

@@ -100,6 +100,14 @@ export class AuthService {
   getUserEmail(): string | null {
     return this.user ? this.user.email : null;
   }
+
+  isClient(): boolean {
+    return this.isAuthenticated() && this.user?.role === Role.CLIENT;
+  }
+
+  get currentUser(): User | null {
+    return this.user;
+  }
   
   
 }
