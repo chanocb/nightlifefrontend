@@ -27,6 +27,7 @@ export class VenueDetailComponent implements OnInit {
   isEditing = false;
   venueForm: FormGroup;
   isOwner = false; // Para verificar si el usuario es un OWNER
+  isClient = false;
   error: string | null = null;
 
   reviewTitle: string = '';
@@ -67,6 +68,7 @@ export class VenueDetailComponent implements OnInit {
 
           const userEmail = this.authService.getUserEmail();
           this.isOwner = this.authService.isOwner() && venue.user.email === userEmail;
+          this.isClient = this.authService.isClient();
           this.cdRef.markForCheck();
 
           this.reviewService.getReviewsByVenueId(reference).subscribe({
@@ -194,6 +196,12 @@ export class VenueDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  get averageRating(): number {
+    if (this.reviews.length === 0) return 0;
+    const total = this.reviews.reduce((sum, r) => sum + r.rating, 0);
+    return total / this.reviews.length;
   }
   
    
