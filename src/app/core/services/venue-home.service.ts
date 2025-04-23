@@ -5,6 +5,7 @@ import {HttpService} from '@core/services/http.service';
 
 import { Venue } from '../models/venue.model';
 import { environment } from '@env';
+import { Music } from '../models/music.model';
 
 @Injectable({providedIn: 'root'})
 export class VenueHomeService {
@@ -45,5 +46,29 @@ export class VenueHomeService {
       deleteVenue(reference: string): Observable<void> {
         return this.httpService.delete(VenueHomeService.END_POINT+`/${reference}`);
       }
-      
+
+      filterByMusicGenres(musicGenres: Set<Music>): Observable<Venue[]> {
+        const params = Array.from(musicGenres).map(genre => `musicGenres=${genre}`).join('&');
+        return this.httpService.get(`${VenueHomeService.END_POINT}/filter/music-genres?${params}`).pipe(
+          tap(data => this._venues$.next(data))
+        );
+      }
+
+      filterByRating(minRating: number): Observable<Venue[]> {
+        return this.httpService.get(`${VenueHomeService.END_POINT}/filter/rating/${minRating}`).pipe(
+          tap(data => this._venues$.next(data))
+        );
+      }
+
+      filterByProduct(productName: string, maxPrice: number): Observable<Venue[]> {
+        return this.httpService.get(`${VenueHomeService.END_POINT}/filter/product?productName=${productName}&maxPrice=${maxPrice}`).pipe(
+          tap(data => this._venues$.next(data))
+        );
+      }
+
+      filterByLGTBFriendly(isLGTBFriendly: boolean): Observable<Venue[]> {
+        return this.httpService.get(`${VenueHomeService.END_POINT}/filter/lgtb-friendly/${isLGTBFriendly}`).pipe(
+          tap(data => this._venues$.next(data))
+        );
+      }
 }

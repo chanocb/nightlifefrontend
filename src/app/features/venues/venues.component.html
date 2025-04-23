@@ -1,14 +1,70 @@
-<div class="container mt-4">
-    <h2 class="text-center">Locales ({{ (venues$ | async)?.length }} encontrados)</h2>
-  
-    <div class="row">
-      <div class="col-md-4 mb-3" *ngFor="let venue of (venues$ | async)">
-        <div class="card h-100" (click)="goToDetails(venue.reference)">
-          <img [src]="venue.imageUrl" alt="Imagen de {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-          <div class="card-body">
-            <h5 class="card-title text-center">{{ venue.name }}</h5>
+<div class="container-fluid mt-4">
+  <h2 class="text-center mb-4">Venues ({{ (venues$ | async)?.length }} found)</h2>
+
+  <div class="row">
+    <!-- Filter Section (1/3 width) -->
+    <div class="col-12 col-md-4 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Filters</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">Music</h6>
+            <div class="form-check" *ngFor="let music of musicTypes">
+              <input class="form-check-input" type="checkbox" [id]="'music-' + music" [(ngModel)]="selectedMusic[music]" (change)="onMusicFilterChange()">
+              <label class="form-check-label" [for]="'music-' + music">{{ music | titlecase }}</label>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">Minimum Rating</h6>
+            <div class="d-flex align-items-center">
+              <input type="range" class="form-range flex-grow-1 me-2" min="0" max="5" step="0.5" [(ngModel)]="minRating" (change)="onRatingChange()">
+              <span class="badge bg-primary">{{ minRating }}</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">Products</h6>
+            <div class="mb-2">
+              <select class="form-select" [(ngModel)]="selectedProduct" (change)="onProductFilterChange()">
+                <option value="">Select a product</option>
+                <option *ngFor="let product of availableProducts" [value]="product.name">
+                  {{ product.name }}
+                </option>
+              </select>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">Max price</span>
+              <input type="number" class="form-control" placeholder="Max price" [(ngModel)]="maxPrice" min="0" step="0.01" (change)="onProductFilterChange()">
+              <span class="input-group-text">€</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">LGTB Friendly</h6>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="lgtb-friendly" [(ngModel)]="isLGTBFriendly" (change)="onLGTBFriendlyChange()">
+              <label class="form-check-label" for="lgtb-friendly">Show only LGTB friendly venues</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Venues Section (2/3 width) -->
+    <div class="col-12 col-md-8">
+      <div class="row">
+        <div class="col-12 col-sm-6 mb-3" *ngFor="let venue of (venues$ | async)">
+          <div class="card h-100" (click)="goToDetails(venue.reference)">
+            <img [src]="venue.imageUrl" alt="Image of {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title text-center">{{ venue.name }}</h5>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
