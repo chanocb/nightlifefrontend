@@ -37,9 +37,11 @@ export class VenueDetailComponent implements OnInit {
   tempRating: number | null = null;
 
   reviews: Review[] = [];
+  authService: AuthService;
+  avgRating: number = 0; // Promedio de las reseñas
 
   constructor(
-    private authService: AuthService,
+    authService: AuthService,
     private venueService: VenueHomeService,
     private reviewService: ReviewService,
     private route: ActivatedRoute,
@@ -48,6 +50,7 @@ export class VenueDetailComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog
   ) {
+    this.authService = authService;
     // Creamos el formulario con los controles que necesitamos
     this.venueForm = this.fb.group({
       name: ['', Validators.required],
@@ -58,6 +61,7 @@ export class VenueDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     const reference = this.route.snapshot.paramMap.get('reference');
     if (reference) {
       this.venueService.getVenueByReference(reference).subscribe({
@@ -70,11 +74,13 @@ export class VenueDetailComponent implements OnInit {
           this.isOwner = this.authService.isOwner() && venue.user.email === userEmail;
           this.isClient = this.authService.isClient();
           this.cdRef.markForCheck();
+          
 
           this.reviewService.getReviewsByVenueId(reference).subscribe({
             next: (reviews) => {
               this.reviews = reviews;
               this.cdRef.markForCheck();
+              this.updateAverageRating();
             },
             error: (error) => {
               console.error('🔴 Error al cargar las reseñas:', error);
@@ -183,6 +189,7 @@ export class VenueDetailComponent implements OnInit {
               this.cdRef.markForCheck();
               this.reviews = [...this.reviews, response];
               //this.reviews.push(response); // Agregar la nueva reseña a la lista
+              this.updateAverageRating();
             },
             error: (error) => {
               this.error = 'Error al enviar la reseña.';
@@ -202,6 +209,31 @@ export class VenueDetailComponent implements OnInit {
     if (this.reviews.length === 0) return 0;
     const total = this.reviews.reduce((sum, r) => sum + r.rating, 0);
     return total / this.reviews.length;
+  }
+
+  private updateAverageRating(): void {
+    if (this.reviews.length > 0) {
+      const total = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+      this.avgRating = total / this.reviews.length;
+    } else {
+      this.avgRating = 0;
+    }
+  }
+
+  deleteReview(reference: string){
+    this.reviewService.deleteReview(reference).subscribe({
+      next: () => {
+        console.log('🟢 Reseña eliminada correctamente');
+        this.reviews = this.reviews.filter(review => review.reference !== reference);
+        this.updateAverageRating();
+        this.cdRef.markForCheck();
+      },
+      error: (err) => {
+        this.error = "Error al eliminar la reseña.";
+        console.error(err);
+      }
+    });
+
   }
   
    

@@ -20,12 +20,10 @@ export class ReviewService {
     );
   }
 
-  // Obtener todas las reseñas
   getReviewsObservable(): Observable<Review[]> {
     return this._reviews$.asObservable();
   }
 
-  // Obtener todas las reseñas de todos los venues
   getReviews(): Observable<Review[]> {
     return this.httpService.get(ReviewService.END_POINT).pipe(
       tap((data) => this._reviews$.next(data))
@@ -34,6 +32,20 @@ export class ReviewService {
 
   getReviewsByVenueId(venueId: string): Observable<Review[]> {
     return this.httpService.get(ReviewService.END_POINT+`/venue/${venueId}`);
+  }
+
+  getReviewById(reference: string): Observable<Review> {
+    return this.httpService.get(`${ReviewService.END_POINT}/${reference}`);
+  }
+
+  deleteReview(reference: string): Observable<any> {
+    return this.httpService.delete(`${ReviewService.END_POINT}/${reference}`).pipe(
+      tap(() => {
+        const currentReviews = this._reviews$.getValue();
+        const updatedReviews = currentReviews.filter((review) => review.reference !== reference);
+        this._reviews$.next(updatedReviews);
+      })
+    );
   }
 
 }

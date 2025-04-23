@@ -146,17 +146,25 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <h4 class="mb-0">Reviews ⭐</h4>
           <div *ngIf="reviews.length > 0" class="badge bg-success fs-6">
-            Avg. Rating: {{ averageRating.toFixed(1) }} / 5
+            Avg. Rating: {{ this.avgRating }} / 5
           </div>
         </div>
         <div class="card-body">
           <div *ngIf="reviews.length > 0">
             <ul class="list-group list-group-flush">
-              <li *ngFor="let review of reviews" class="list-group-item">
-                <h5>{{ review.title }}</h5>
-                <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
-                <p>{{ review.opinion }}</p>
-                <p class="text-muted">- {{ review.user.firstName }} {{ review.user.lastName }}</p>
+              <li *ngFor="let review of reviews" class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                  <p><strong><h2>{{ review.title }}</h2></strong></p>
+                  <p><i *ngFor="let star of [].constructor(review.rating)" class="fa fa-star"></i></p>
+                  <p>{{ review.opinion }}</p>
+                  <p>Escrito por: {{ review.user.firstName }} {{ review.user.lastName }}</p>
+                </div>
+                <button 
+                  *ngIf="review.user.email === authService.getUserEmail()" 
+                  (click)="deleteReview(review.reference!)" 
+                  class="btn btn-danger">
+                  <i class="fa fa-trash"></i>
+                </button>
               </li>
             </ul>
           </div>
