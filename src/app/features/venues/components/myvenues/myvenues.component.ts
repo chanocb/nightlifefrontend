@@ -6,17 +6,20 @@ import { AuthService } from '@core/services/auth.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VenueCreateDialogComponent } from '../../dialogs/creation/venue-creation-dialog.component';
 import { BehaviorSubject, of, switchMap } from 'rxjs';
 import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
 import { VenueEditDialogComponent } from '../../dialogs/edit/venue-edit-dialog.component';
+import { ReviewDialogComponent } from '../../dialogs/review/review-dialog.component';
+import { Review } from '@core/models/review.model';
+import { ReviewService } from '@core/services/review.service';
 
 
 @Component({
   selector: 'app-myvenues',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MatDialogModule],
   templateUrl: './myvenues.component.html',
   styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +32,8 @@ export class MyVenuesComponent implements OnInit {
   constructor(
     private readonly dialog: MatDialog,
     private authService: AuthService,
-    private venueService: VenueHomeService
+    private venueService: VenueHomeService,
+    private reviewService: ReviewService,
   ) {
     
   }
@@ -116,6 +120,16 @@ export class MyVenuesComponent implements OnInit {
     return venue.musicGenres && venue.musicGenres.length
       ? venue.musicGenres.join(', ')
       : 'No disponible';
+  }
+
+  openReviewsDialog(venueReference: string): void {
+    // Implementar la lógica para abrir el diálogo de reseñas
+    this.reviewService.getReviewsByVenueId(venueReference).subscribe((reviews: Review[]) => {
+      this.dialog.open(ReviewDialogComponent, {
+        width: '400px',
+        data: { reviews }
+      });
+    });
   }
   
 }

@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Reseñas</h2>
+<mat-dialog-content>
+  <ng-container *ngIf="data.reviews && data.reviews.length > 0; else noReviews">
+    <ul>
+        <li *ngFor="let review of data.reviews" class="list-group-item d-flex justify-content-between align-items-start">
+            <div>
+              <p><strong><h2>{{ review.title }}</h2></strong></p>
+              <p><i *ngFor="let star of [].constructor(review.rating)" class="fa fa-star"></i></p>
+              <p>{{ review.opinion }}</p>
+              <p>Escrito por: {{ review.user.firstName }} {{ review.user.lastName }}</p>
+            </div>
+            
+          </li>
+    </ul>
+  </ng-container>
+  <ng-template #noReviews>
+    <p>No hay reseñas disponibles.</p>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions >
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>
