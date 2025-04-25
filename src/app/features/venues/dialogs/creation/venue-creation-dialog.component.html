@@ -73,6 +73,33 @@
       </button>
     </div>
 
+    <!-- Horarios -->
+    <div formArrayName="schedules" style="margin-top: 20px;">
+      <mat-label>Horarios</mat-label>
+      <div *ngFor="let schedule of schedulesControls; let i = index" [formGroupName]="i" style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+        <mat-form-field appearance="outline" style="width: 120px;">
+          <mat-label>Día</mat-label>
+          <mat-select formControlName="dayOfWeek">
+            <mat-option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 100px;">
+          <mat-label>Inicio</mat-label>
+          <input matInput type="time" formControlName="startTime">
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 100px;">
+          <mat-label>Fin</mat-label>
+          <input matInput type="time" formControlName="endTime">
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="removeSchedule(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <button mat-stroked-button color="accent" (click)="addSchedule()" type="button">
+        Añadir horario
+      </button>
+    </div>
+
     <!-- Coordenadas -->
     <div formGroupName="coordinate" style="display: flex; flex-direction: column; gap: 16px;">
       <mat-label>Coordenadas</mat-label>

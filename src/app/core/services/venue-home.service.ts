@@ -71,4 +71,13 @@ export class VenueHomeService {
           tap(data => this._venues$.next(data))
         );
       }
+
+      /**
+       * Crea los horarios para un venue específico
+       * @param reference Referencia del venue
+       * @param schedules Array de horarios
+       */
+      createSchedules(reference: string, schedules: import('../models/schedule.model').Schedule[]): Observable<Venue> {
+        return this.httpService.post(`${VenueHomeService.END_POINT}/${reference}/schedules`, schedules);
+      }
 }
