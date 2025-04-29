@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Crear Evento</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Fecha y hora</mat-label>
+      <input matInput type="datetime-local" formControlName="dateTime">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="create()" [disabled]="form.invalid">Crear</button>
+</mat-dialog-actions>

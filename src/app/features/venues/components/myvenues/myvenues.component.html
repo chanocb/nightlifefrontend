@@ -19,6 +19,7 @@
           <th scope="col">Imagen</th>
           <th scope="col">Géneros Musicales</th>
           <th scope="col">Coordenadas</th> <!-- Nueva columna para las coordenadas -->
+          <th scope="col">Eventos</th>
           <th scope="col">Reseñas</th>
           <th scope="col">Acciones</th>
         </tr>
@@ -54,6 +55,11 @@
               Lat: {{ venue.coordinate.latitude }}, Long: {{ venue.coordinate.longitude }}
             </span>
             <span *ngIf="!venue.coordinate">No disponible</span>
+          </td>
+          <td class="text-center">
+            <button mat-icon-button color="primary" (click)="openEventsDialog(venue.reference)">
+              <mat-icon>event</mat-icon>
+            </button>
           </td>
           <td class="text-center">
             <button mat-icon-button color="primary" (click)="openReviewsDialog(venue.reference)">

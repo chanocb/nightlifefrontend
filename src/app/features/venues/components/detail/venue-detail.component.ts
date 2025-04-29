@@ -12,6 +12,8 @@ import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dial
 import { MapComponent } from '../../../map/map.component';
 import { Review } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
+import { Event } from '@core/models/event.model';
+import { EventService } from '@core/services/event.service';
 
 
 @Component({
@@ -40,10 +42,13 @@ export class VenueDetailComponent implements OnInit {
   authService: AuthService;
   avgRating: number = 0; // Promedio de las reseñas
 
+  events: Event[] = [];
+
   constructor(
     authService: AuthService,
     private venueService: VenueHomeService,
     private reviewService: ReviewService,
+    private eventService: EventService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
@@ -90,6 +95,16 @@ export class VenueDetailComponent implements OnInit {
         error: (error) => {
           this.error = 'Error al cargar el venue.';
           console.error('🔴 Error al cargar el venue:', error);
+        }
+      });
+
+      this.eventService.getEventsByVenueReference(reference).subscribe({
+        next: (events) => {
+          this.events = events;
+          this.cdRef.markForCheck();
+        },
+        error: (error) => {
+          console.error('🔴 Error al cargar los eventos:', error);
         }
       });
     }

@@ -14,6 +14,7 @@ import { VenueEditDialogComponent } from '../../dialogs/edit/venue-edit-dialog.c
 import { ReviewDialogComponent } from '../../dialogs/review/review-dialog.component';
 import { Review } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class MyVenuesComponent implements OnInit {
     private authService: AuthService,
     private venueService: VenueHomeService,
     private reviewService: ReviewService,
+    private router: Router
   ) {
     
   }
@@ -130,6 +132,10 @@ export class MyVenuesComponent implements OnInit {
         data: { reviews }
       });
     });
+  }
+
+  openEventsDialog(venueReference: string){
+    this.router.navigate([`/myvenues/${venueReference}/events`]);
   }
   
 }
