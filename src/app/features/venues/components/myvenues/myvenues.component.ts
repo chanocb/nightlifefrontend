@@ -8,14 +8,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VenueCreateDialogComponent } from '../../dialogs/creation/venue-creation-dialog.component';
-import { BehaviorSubject, of, switchMap } from 'rxjs';
+import { BehaviorSubject, of, switchMap, forkJoin } from 'rxjs';
 import { ConfirmDialogComponent } from '../../dialogs/confirm/venue-confirm-dialog.component';
 import { VenueEditDialogComponent } from '../../dialogs/edit/venue-edit-dialog.component';
 import { ReviewDialogComponent } from '../../dialogs/review/review-dialog.component';
 import { Review } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
 import { Router } from '@angular/router';
-
+import { Schedule } from '@core/models/schedule.model';
 
 @Component({
   selector: 'app-myvenues',
@@ -29,6 +29,7 @@ export class MyVenuesComponent implements OnInit {
   private venuesSubject = new BehaviorSubject<Venue[]>([]);
   venues$ = this.venuesSubject.asObservable();
   isOwner: boolean = false;
+  venueSchedules: { [key: string]: Schedule[] } = {};
 
   constructor(
     private readonly dialog: MatDialog,
@@ -37,7 +38,7 @@ export class MyVenuesComponent implements OnInit {
     private reviewService: ReviewService,
     private router: Router
   ) {
-    
+    this.venueSchedules = {};
   }
 
   ngOnInit(): void {
@@ -47,11 +48,29 @@ export class MyVenuesComponent implements OnInit {
     } else {
       this.venues$ = of([]);
     }
-      
   }
+
   loadVenues(): void {
-    this.venueService.getVenuesByOwner(this.authService.getUserEmail()!).subscribe(venues => {
-      this.venuesSubject.next(venues); // Emitir los venues actualizados al BehaviorSubject
+    this.venueService.getVenuesByOwner(this.authService.getUserEmail()!).pipe(
+      switchMap(venues => {
+        this.venuesSubject.next(venues);
+        const scheduleRequests = venues.map(venue => 
+          this.venueService.getSchedules(venue.reference).pipe(
+            switchMap(schedules => {
+              this.venueSchedules[venue.reference] = schedules;
+              return of(schedules);
+            })
+          )
+        );
+        return forkJoin(scheduleRequests);
+      })
+    ).subscribe({
+      next: () => {
+        this.venuesSubject.next([...this.venuesSubject.value]);
+      },
+      error: (error) => {
+        console.error('Error al cargar los venues o sus horarios:', error);
+      }
     });
   }
 
@@ -59,7 +78,7 @@ export class MyVenuesComponent implements OnInit {
     this.dialog.open(VenueCreateDialogComponent).afterClosed().pipe(
       switchMap(() => this.venueService.getVenuesByOwner(this.authService.getUserEmail()!))
     ).subscribe((venues) => {
-      this.venuesSubject.next(venues); // Actualizar la lista de venues después de crear uno
+      this.venuesSubject.next(venues);
     });
     console.log('Create venue');
   }
@@ -70,9 +89,21 @@ export class MyVenuesComponent implements OnInit {
       data: { venue }
     });
 
-    dialogRef.afterClosed().subscribe(updatedVenue => {
-      if (updatedVenue) {
-        this.updateVenue(updatedVenue);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateVenue(result.venue);
+        
+        if (result.schedules) {
+          this.venueService.createSchedules(venue.reference, result.schedules).subscribe({
+            next: () => {
+              this.venueSchedules[venue.reference] = result.schedules;
+              this.venuesSubject.next([...this.venuesSubject.value]);
+            },
+            error: (error) => {
+              console.error('Error al actualizar los horarios:', error);
+            }
+          });
+        }
       }
     });
   }
@@ -85,11 +116,10 @@ export class MyVenuesComponent implements OnInit {
         );
         this.venuesSubject.next(updatedVenues);
       },
-      error: (err) => {
-        console.error('Error al actualizar el venue', err);
+      error: (error) => {
+        console.error('Error al actualizar el venue:', error);
       }
     });
-    console.log('Nuevo Venue', updatedVenue);
   }
 
   openDeleteDialog(venue: Venue): void {
@@ -108,12 +138,12 @@ export class MyVenuesComponent implements OnInit {
   deleteVenue(venue: Venue): void {
     this.venueService.deleteVenue(venue.reference).subscribe({
       next: () => {
-        // Filtrar el venue eliminado de la lista y emitir los venues actualizados
         const updatedVenues = this.venuesSubject.value.filter(v => v.reference !== venue.reference);
         this.venuesSubject.next(updatedVenues);
+        delete this.venueSchedules[venue.reference];
       },
-      error: (err) => {
-        console.error('Error al eliminar el venue', err);
+      error: (error) => {
+        console.error('Error al eliminar el venue:', error);
       }
     });
   }
@@ -125,19 +155,26 @@ export class MyVenuesComponent implements OnInit {
   }
 
   openReviewsDialog(venueReference: string): void {
-    // Implementar la lógica para abrir el diálogo de reseñas
-    this.reviewService.getReviewsByVenueId(venueReference).subscribe((reviews: Review[]) => {
-      this.dialog.open(ReviewDialogComponent, {
-        width: '400px',
-        data: { reviews }
-      });
+    this.reviewService.getReviewsByVenueId(venueReference).subscribe({
+      next: (reviews: Review[]) => {
+        this.dialog.open(ReviewDialogComponent, {
+          width: '400px',
+          data: { reviews }
+        });
+      },
+      error: (error) => {
+        console.error('Error al cargar las reseñas:', error);
+      }
     });
   }
 
-  openEventsDialog(venueReference: string){
+  openEventsDialog(venueReference: string): void {
     this.router.navigate([`/myvenues/${venueReference}/events`]);
   }
-  
+
+  openScheduleDialog(venue: Venue): void {
+    console.log('Opening schedule dialog for venue:', venue.reference);
+  }
 }
 
 

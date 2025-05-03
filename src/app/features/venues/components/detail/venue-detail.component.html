@@ -42,24 +42,30 @@
                 <span *ngIf="!venue?.coordinate?.latitude || !venue?.coordinate?.longitude">Coordinates not available</span>
               </td>
             </tr>
+            <tr>
+              <th>🕒 Schedule</th>
+              <td>
+                <div *ngIf="schedules && schedules.length > 0">
+                  <div *ngFor="let schedule of schedules">
+                    {{ schedule.dayOfWeek }}: {{ schedule.startTime }} - {{ schedule.endTime }}
+                  </div>
+                </div>
+                <span *ngIf="!schedules || schedules.length === 0">No schedules available</span>
+              </td>
+            </tr>
           </tbody>
         </table>
 
-        <div *ngIf="venue!.products.length > 0">
+        <div *ngIf="venue && venue.products && venue.products.length > 0">
           <h5>Products 🍸</h5>
           <ul>
-            <li *ngFor="let product of venue!.products">
+            <li *ngFor="let product of venue.products">
               {{ product.name }} : {{ product.price }}€
             </li>
           </ul>
         </div>
-        <div *ngIf="venue?.products?.length === 0">
+        <div *ngIf="!venue || !venue.products || venue.products.length === 0">
           <p>No products available.</p>
-        </div>
-
-        <div class="d-flex justify-content-start gap-2">
-          <button *ngIf="isOwner" class="btn btn-primary" (click)="toggleEditMode()">Edit</button>
-          <button *ngIf="isOwner" class="btn btn-danger" (click)="deleteVenue()">Delete</button>
         </div>
       </div>
 

@@ -6,3 +6,33 @@
     transform: scale(1.05); /* Efecto de agrandamiento suave */
     transition: transform 0.3s ease-in-out; /* Efecto suave */
 }
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.schedule-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.schedule-item .day {
+  font-weight: 500;
+  color: #333;
+}
+
+.schedule-item .time {
+  color: #666;
+}
+
+.no-schedules {
+  color: #999;
+  font-style: italic;
+}

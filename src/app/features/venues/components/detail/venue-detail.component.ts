@@ -14,7 +14,7 @@ import { Review } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
 import { Event } from '@core/models/event.model';
 import { EventService } from '@core/services/event.service';
-
+import { Schedule } from '@core/models/schedule.model';
 
 @Component({
   selector: 'app-venue-detail',
@@ -31,6 +31,7 @@ export class VenueDetailComponent implements OnInit {
   isOwner = false; // Para verificar si el usuario es un OWNER
   isClient = false;
   error: string | null = null;
+  schedules: Schedule[] = [];
 
   reviewTitle: string = '';
   rating: number = 1;
@@ -80,6 +81,8 @@ export class VenueDetailComponent implements OnInit {
           this.isClient = this.authService.isClient();
           this.cdRef.markForCheck();
           
+          // Load schedules
+          this.loadSchedules(reference);
 
           this.reviewService.getReviewsByVenueId(reference).subscribe({
             next: (reviews) => {
@@ -250,6 +253,16 @@ export class VenueDetailComponent implements OnInit {
     });
 
   }
-  
-   
+
+  private loadSchedules(reference: string): void {
+    this.venueService.getSchedules(reference).subscribe({
+      next: (schedules) => {
+        this.schedules = schedules;
+        this.cdRef.markForCheck();
+      },
+      error: (error) => {
+        console.error('🔴 Error al cargar los horarios:', error);
+      }
+    });
+  }
 }

@@ -80,4 +80,12 @@ export class VenueHomeService {
       createSchedules(reference: string, schedules: import('../models/schedule.model').Schedule[]): Observable<Venue> {
         return this.httpService.post(`${VenueHomeService.END_POINT}/${reference}/schedules`, schedules);
       }
+
+      getSchedules(reference: string): Observable<import('../models/schedule.model').Schedule[]> {
+        return this.httpService.get(`${VenueHomeService.END_POINT}/${reference}/schedules`);
+      }
+
+      getSchedule(reference: string, scheduleId: string): Observable<import('../models/schedule.model').Schedule> {
+        return this.httpService.get(`${VenueHomeService.END_POINT}/${reference}/schedules/${scheduleId}`);
+      }
 }
