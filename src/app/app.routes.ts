@@ -17,5 +17,5 @@ export const routes: Routes = [
   { path: 'myvenues', component: MyVenuesComponent },
   { path: 'venues/:reference', component: VenueDetailComponent },
   { path: 'myvenues/:venueReference/events', component: EventsComponent },
-  { path: '', redirectTo:'home', pathMatch: 'full' }
+  { path: '**', redirectTo:'home' }
 ];

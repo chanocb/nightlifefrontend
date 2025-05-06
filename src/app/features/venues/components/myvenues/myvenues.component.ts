@@ -46,7 +46,7 @@ export class MyVenuesComponent implements OnInit {
     if (this.isOwner) {
       this.loadVenues();
     } else {
-      this.venues$ = of([]);
+      this.router.navigate([`/home`]);
     }
   }
 

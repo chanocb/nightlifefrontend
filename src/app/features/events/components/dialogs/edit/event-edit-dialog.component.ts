@@ -21,44 +21,49 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatButton, CommonModule, MatDialogContent, MatIcon,
+    MatDialogTitle, MatInput, MatButton, CommonModule, MatDialogContent,
     MatSelectModule, MatOptionModule, MatDialogActions
   ],
-  templateUrl: './event-creation-dialog.component.html'
+  templateUrl: './event-edit-dialog.component.html'
 })
-export class EventCreateDialogComponent {
+export class EventEditDialogComponent {
   form: FormGroup;
-  
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<EventCreateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { venueReference: string },
-    private eventService: EventService,
-    private venueService: VenueHomeService
+    private dialogRef: MatDialogRef<EventEditDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any // Recibe el evento a editar
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      dateTime: ['', Validators.required]
+      name: [data.event.name, Validators.required],
+      description: [data.event.description, Validators.required],
+      dateTime: [this.convertToLocalTime(data.event.dateTime), Validators.required]
     });
   }
 
-  async create(): Promise<void> {
-    if (this.form.invalid) return;
+  // Convierte la fecha UTC a la hora local
+  private convertToLocalTime(dateTime: string): string {
+    const utcDate = new Date(dateTime);
+    const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+    return localDate.toISOString().slice(0, 16); // Formato compatible con datetime-local
+  }
 
-    const eventData = {
-      ...this.form.value,
-      venueReference: this.data.venueReference
-    };
-    
-    eventData.dateTime = formatDate(eventData.dateTime, 'yyyy-MM-ddTHH:mm', 'en-US') + ":00.000"; 
-    eventData.venue = await firstValueFrom(this.venueService.getVenueByReference(this.data.venueReference));
+  // Convierte la hora local a UTC antes de guardar
+  private convertToUTC(dateTime: string): string {
+    const localDate = new Date(dateTime);
+    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+    return utcDate.toISOString();
+  }
 
-    this.eventService.createEvent(eventData).subscribe(() => {
-
-      this.dialogRef.close('created');
-    });
+  save(): void {
+    if (this.form.valid) {
+      const updatedEvent = {
+        ...this.data.event,
+        ...this.form.value,
+        dateTime: this.convertToLocalTime(this.form.value.dateTime) // Convertir a UTC
+      };
+      this.dialogRef.close(updatedEvent);
+    }
   }
 
   cancel(): void {

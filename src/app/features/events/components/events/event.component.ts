@@ -6,6 +6,7 @@ import { Event } from '@core/models/event.model';
 import { MatDialog } from '@angular/material/dialog';
 import { EventCreateDialogComponent } from '../dialogs/creation/event-creation-dialog.component';
 import { MatIcon } from '@angular/material/icon';
+import { EventEditDialogComponent } from '../dialogs/edit/event-edit-dialog.component';
 
 @Component({
     selector: 'app-events',
@@ -64,6 +65,31 @@ export class EventsComponent implements OnInit {
   deleteEvent(event: any): void {
     this.eventService.deleteEvent(event.reference).subscribe(() => {
       this.events = this.events.filter(e => e.reference !== event.reference);
+    });
+  }
+
+  editEvent(event: any): void {
+    const dialogRef = this.dialog.open(EventEditDialogComponent, {
+      width: '400px',
+      data: { event }
+    });
+  
+    dialogRef.afterClosed().subscribe((updatedEvent) => {
+      if (updatedEvent) {
+        // Actualiza el evento en la lista
+        const index = this.events.findIndex(e => e.reference === updatedEvent.id);
+        if (index !== -1) {
+          this.events[index] = updatedEvent;
+        }
+        this.eventService.updateEvent(updatedEvent.reference, updatedEvent).subscribe({
+          next: () => {
+            this.loadEvents(); // Recarga la lista de eventos
+          },
+          error: (error) => {
+            console.error('Error al actualizar el evento:', error);
+          }
+        });
+      }
     });
   }
 }

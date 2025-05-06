@@ -23,9 +23,14 @@
         <p>{{ event.description }}</p>
         <p>{{ event.dateTime | date:'dd \'de\' MMMM \'de\' yyyy, HH:mm' }}</p>
       </div>
-      <button mat-icon-button color="warn" (click)="deleteEvent(event)">
-        <mat-icon>delete</mat-icon>
-      </button>
+      <div class="d-flex gap-2">
+        <button mat-icon-button color="primary" (click)="editEvent(event)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteEvent(event)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

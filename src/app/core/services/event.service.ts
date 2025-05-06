@@ -26,4 +26,8 @@ import { tap } from "rxjs";
     deleteEvent(eventReference: string): Observable<void> {
         return this.httpService.delete(`${EventService.END_POINT}/${eventReference}`);
       }
+
+      updateEvent(eventReference: string, event: Event): Observable<void> {
+        return this.httpService.put(`${EventService.END_POINT}/${eventReference}`, event);
+      }
   }
