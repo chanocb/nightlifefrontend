@@ -68,7 +68,7 @@ export class VenueDetailComponent implements OnInit {
 
   ngOnInit(): void {
     
-    const reference = this.route.snapshot.paramMap.get('reference');
+    const reference = this.route.snapshot.paramMap.get('venueReference');
     if (reference) {
       this.venueService.getVenueByReference(reference).subscribe({
         next: (venue) => {
@@ -264,5 +264,10 @@ export class VenueDetailComponent implements OnInit {
         console.error('🔴 Error al cargar los horarios:', error);
       }
     });
+  }
+
+  navigateToEvent(eventReference: string): void {
+    const venueReference = this.venue!.reference; // Obtén el reference del venue
+    this.router.navigate(['/venues', venueReference, 'event', eventReference]);
   }
 }

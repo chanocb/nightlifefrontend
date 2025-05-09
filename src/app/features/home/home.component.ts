@@ -42,8 +42,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  goToDetails(reference: string): void {
-    console.log('Navegando a:', `/venues/${reference}`);
-    this.router.navigate(['/venues', reference]);
+  goToDetails(venueReference: string): void {
+    console.log('Navegando a:', `/venues/${venueReference}`);
+    this.router.navigate(['/venues', venueReference]);
   }
 }

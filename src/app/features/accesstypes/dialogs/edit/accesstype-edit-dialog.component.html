@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Editar Tipo de Acceso</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nombre del Tipo de Acceso</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="form.get('title')?.hasError('required')">
+        El nombre es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Capacidad Máxima</mat-label>
+      <input matInput type="number" [min]="0" formControlName="capacityMax" />
+      <mat-error *ngIf="form.get('capacityMax')?.hasError('required')">
+        La capacidad máxima es obligatoria.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" [min]="0" formControlName="price" />
+      <mat-error *ngIf="form.get('price')?.hasError('required')">
+        El precio es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Hora Límite</mat-label>
+      <input matInput type="time" formControlName="limitHourMax" />
+      <mat-error *ngIf="form.get('limitHourMax')?.hasError('required')">
+        La hora límite es obligatoria.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Número de Bebidas</mat-label>
+      <input matInput type="number" [min]="0" formControlName="numDrinks" />
+      <mat-error *ngIf="form.get('numDrinks')?.hasError('required')">
+        El número de bebidas es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">Guardar</button>
+</mat-dialog-actions>

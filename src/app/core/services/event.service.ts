@@ -4,6 +4,7 @@ import { HttpService } from "./http.service";
 import { Observable } from "rxjs/internal/Observable";
 import { Event } from "@core/models/event.model";
 import { tap } from "rxjs";
+import { AccessType } from "@core/models/access-type.model";
 
 @Injectable({
     providedIn: 'root',
@@ -29,5 +30,13 @@ import { tap } from "rxjs";
 
       updateEvent(eventReference: string, event: Event): Observable<void> {
         return this.httpService.put(`${EventService.END_POINT}/${eventReference}`, event);
+      }
+
+      getAccessTypesByEventReference(eventReference: string): Observable<AccessType[]> {
+        return this.httpService.get(`${EventService.END_POINT}/${eventReference}/access-types`);
+      }
+
+      getEventByReference(eventReference: string): Observable<Event> {
+        return this.httpService.get(`${EventService.END_POINT}/${eventReference}`);
       }
   }

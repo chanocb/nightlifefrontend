@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div *ngIf="isLoading" class="text-center">
+    <p>Cargando datos del evento...</p>
+  </div>
+
+  <button *ngIf="isOwner" class="btn btn-primary mt-3" (click)="addAccessType()" >Añadir tipo de acceso</button>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading && event" class="card shadow-sm">
+    <div class="card-header">
+      <h2>{{ event.name }}</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Descripción:</strong> {{ event.description }}</p>
+      <p><strong>Fecha y hora:</strong> {{ event.dateTime | date: 'dd \'de\' MMMM \'de\' yyyy, HH:mm' }}</p>
+    </div>
+
+    <div *ngIf="accessTypes.length > 0" class="mt-4">
+      <h3>Tipos de Acceso</h3>
+      <ul class="list-group">
+        <li *ngFor="let accessType of accessTypes;  index as i" class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            <h5><strong>{{ accessType.title }}</strong></h5>
+            <p><strong>Capacidad Máxima:</strong> {{ accessType.capacityMax }}</p>
+            <p><strong>Hora Límite:</strong> {{ accessType.limitHourMax.substring(0, 5) }}</p>
+            <p><strong>Número de Bebidas:</strong> {{ accessType.numDrinks }}</p>
+          </span>
+          <div class="d-flex align-items-center" >
+            <input *ngIf="!isOwner"
+              type="number" 
+              class="form-control form-control-sm me-2" 
+              style="width: 80px;" 
+              [(ngModel)]="quantitySelected[i].quantity"
+              (input)="updateTotals()" 
+              [min]="0"
+              placeholder="0">
+            <span class="badge bg-primary text-white">{{ accessType.price | currency:'EUR' }}</span>
+            <button *ngIf="isOwner" class="btn btn-primary btn-sm me-2" (click)="editAccessType(i)">Editar</button>
+            <button *ngIf="isOwner" class="btn btn-danger btn-sm" (click)="deleteAccessType(i)">Borrar</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="mt-4" *ngIf="!isOwner">
+      <h4>Resumen</h4>
+      <p><strong>Total de entradas:</strong> {{ totalTickets }}</p>
+      <p><strong>Precio total:</strong> {{ totalPrice | currency:'EUR' }}</p>
+    </div>
+    <div *ngIf="!accessTypes || accessTypes.length === 0" class="mt-4">
+      <p>No hay tipos de acceso disponibles para este evento.</p>
+    </div>
+  </div>
+  
+</div>

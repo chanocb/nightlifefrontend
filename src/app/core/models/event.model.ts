@@ -1,3 +1,4 @@
+import { AccessType } from "./access-type.model";
 import { Venue } from "./venue.model";
 
 export interface Event {
@@ -6,4 +7,5 @@ export interface Event {
     description: string;
     dateTime: string;
     venue: Venue;
+    accessTypes?: AccessType[];
   }

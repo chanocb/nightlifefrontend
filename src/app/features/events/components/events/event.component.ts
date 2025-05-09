@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event.service';
 import { Event } from '@core/models/event.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,7 +21,8 @@ export class EventsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -91,5 +92,11 @@ export class EventsComponent implements OnInit {
         });
       }
     });
+  }
+
+  navigateToEvent(eventReference: string): void {
+    const venueReference = this.route.snapshot.paramMap.get('venueReference');
+    //const venueReference = this.venue!.reference; // Obtén el reference del venue
+    this.router.navigate(['/myvenues', venueReference, 'event', eventReference]);
   }
 }

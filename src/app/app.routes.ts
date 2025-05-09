@@ -7,6 +7,7 @@ import { VenuesComponent } from './features/venues/venues.component';
 import { VenueDetailComponent } from './features/venues/components/detail/venue-detail.component';
 import { MyVenuesComponent } from './features/venues/components/myvenues/myvenues.component';
 import { EventsComponent } from './features/events/components/events/event.component';
+import { EventDetailComponent } from './features/events/components/detail/event-detail.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent }, 
@@ -15,7 +16,9 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'venues', component: VenuesComponent },
   { path: 'myvenues', component: MyVenuesComponent },
-  { path: 'venues/:reference', component: VenueDetailComponent },
+  { path: 'venues/:venueReference', component: VenueDetailComponent },
+  { path: 'venues/:venueReference/event/:eventReference', component: EventDetailComponent },
   { path: 'myvenues/:venueReference/events', component: EventsComponent },
+  { path: 'myvenues/:venueReference/event/:eventReference', component: EventDetailComponent },
   { path: '**', redirectTo:'home' }
 ];
