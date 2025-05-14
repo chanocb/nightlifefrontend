@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Validar reserva</h2>
+
+  <zxing-scanner
+  [formats]="[BarcodeFormat.QR_CODE]"
+  [device]="selectedDevice"
+  (scanSuccess)="onCodeResult($event)">
+</zxing-scanner>
+
+<div *ngIf="validReservation" class="success-message">
+  <h3>Reserva válida</h3>
+  <p>Detalles de la reserva:</p>
+  <ul>
+    <li><strong>ID:</strong> {{ validReservation.reference }}</li>
+    <li><strong>Nombre:</strong> {{ validReservation.user.firstName }}</li>
+    <li><strong>Apellido:</strong> {{ validReservation.user.lastName }}</li>
+    <li><strong>Tipo de acceso:</strong> {{ validReservation.accessType.title }}</li>
+    <li><strong>Estado:</strong> {{ validReservation.status }}</li>
+    <!-- Agrega más detalles según los datos disponibles -->
+  </ul>
+</div>
+
+<div *ngIf="!validReservation && validReservation !== null" class="error-message">
+  <h3>Reserva no válida</h3>
+  <p>El código escaneado no corresponde a una reserva válida.</p>
+</div>
+
+</div>

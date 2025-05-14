@@ -34,6 +34,7 @@
               class="form-control form-control-sm me-2" 
               style="width: 80px;" 
               [(ngModel)]="quantitySelected[i].quantity"
+              [max]="accessType.capacityMax"
               (input)="updateTotals()" 
               [min]="0"
               placeholder="0">
@@ -50,8 +51,16 @@
       <p><strong>Total de entradas:</strong> {{ totalTickets }}</p>
       <p><strong>Precio total:</strong> {{ totalPrice | currency:'EUR' }}</p>
     </div>
+    <div *ngIf="!isOwner && accessTypes.length > 0 && isClient" class="text-end mt-3">
+      <button class="btn btn-success" (click)="createReservation()">
+        Crear reserva
+      </button>
+    </div>
     <div *ngIf="!accessTypes || accessTypes.length === 0" class="mt-4">
       <p>No hay tipos de acceso disponibles para este evento.</p>
+    </div>
+    <div *ngIf="reservationsCreated.length !== 0 || reservationsFailed.length !== 0" class="mt-4">
+      <p>Tienes {{ reservationsCreated.length}} reservas creadas y Tienes {{ reservationsFailed.length}} reservas falladas</p>
     </div>
   </div>
   

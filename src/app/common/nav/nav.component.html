@@ -19,6 +19,20 @@
             My Venues
           </a>
         </li>
+         <!-- Mostrar solo si el usuario es CLIENT -->
+         <li class="nav-item" *ngIf="!(isOwner$ | async)">
+          <a class="nav-link" (click)="goToReservations()">
+            <mat-icon>event</mat-icon>
+            My Reservations
+          </a>
+        </li>
+        <!-- Mostrar solo si el usuario es OWNER -->
+        <li class="nav-item" *ngIf="(isOwner$ | async)">
+          <a class="nav-link" (click)="goToValidate()">
+            <mat-icon>check</mat-icon>
+            Validate Reservations
+          </a>
+        </li>
       </ul>
       <ul class="navbar-nav ms-auto">
        <!-- Mostrar si NO está autenticado -->

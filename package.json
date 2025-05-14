@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@auth0/angular-jwt": "^5.2.0",
+    "@zxing/ngx-scanner": "^19.0.0",
     "leaflet": "^1.9.4",
     "ng-leaflet-universal": "^15.2.8",
     "rxjs": "~7.8.0",

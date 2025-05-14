@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services/event.service';
 import { Event } from '@core/models/event.model';
@@ -10,6 +10,9 @@ import { AccessType } from '@core/models/access-type.model';
 import { FormsModule } from '@angular/forms';
 import { AccessTypeService } from '@core/services/accesstype.service';
 import { AccessTypeEditDialogComponent } from 'app/features/accesstypes/dialogs/edit/accesstype-edit-dialog.component';
+import { ReservationService } from '@core/services/reservation.service';
+import { Reservation } from '@core/models/reservation.model';
+import { ReservationStatus } from '@core/models/reservationstatus.model';
 
 @Component({
     selector: 'app-events',
@@ -22,18 +25,21 @@ export class EventDetailComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
   isOwner: boolean = false;
+  isClient: boolean = false;
   authService: AuthService;
   accessTypes: Array<AccessType> = [];
   quantitySelected: { accessType: string; quantity: number }[] = [];
   totalTickets: number = 0;
   totalPrice: number = 0;
-  aux_quantity : number = 0;
   venueReference: string;
   eventReference: string = '';
+  reservationsCreated : Array<AccessType>= [];
+  reservationsFailed : Array<AccessType>= [];
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
     private accessTypeService: AccessTypeService,
+    private reservationService: ReservationService,
     authService: AuthService,
     private dialog: MatDialog
   ) {
@@ -50,6 +56,7 @@ export class EventDetailComponent implements OnInit {
     }
 
     this.isOwner = this.authService.isOwner();
+    this.isClient = this.authService.isClient();
   }
 
   loadEvent(venueReference: string, eventReference: string): void {
@@ -86,8 +93,6 @@ export class EventDetailComponent implements OnInit {
         console.error('Error al crear el acceso:', error);
       }
     });
-
-
   }
   
   updateTotals(): void {
@@ -131,4 +136,42 @@ export class EventDetailComponent implements OnInit {
       }
     });
   }
+
+  createReservation(): void {
+    if (this.totalTickets === 0) {
+      console.error('No hay entradas seleccionadas.');
+      return;
+    }
+    this.quantitySelected.forEach((quantitySelected) => {
+      if (quantitySelected.quantity != 0) {
+        console.log('Acceso:', quantitySelected.accessType, 'Cantidad:', quantitySelected.quantity);
+        const reservationData : Reservation = {
+          reference: '',
+          accessType: this.accessTypes.find((x) => 
+            x.reference == quantitySelected.accessType)!,
+
+          user: this.authService.currentUser!,
+          finalPrice: this.totalPrice,
+          status: ReservationStatus.PENDING,
+          purchasedDate: new Date().toISOString(),
+        };
+        for(let i = 0; i < quantitySelected.quantity; i++) {
+          this.reservationService.createReservation(reservationData).subscribe({
+            next: (response) => {
+              if(response?.accessType != null){
+                this.reservationsCreated.push(reservationData.accessType);
+              }else{
+                this.reservationsFailed.push(reservationData.accessType);
+              }
+              console.log('Reserva creada con éxito:', response);
+            },
+            error: (error) => {
+              console.error('Error al crear la reserva:', error);
+            }
+          });
+        }
+        
+    };
+  });
+}
 }

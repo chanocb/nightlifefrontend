@@ -4,7 +4,7 @@ import { Role } from '../../core/models/role.model';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MapComponent } from '../map/map.component';
 import { Venue } from '../../core/models/venue.model';
@@ -13,7 +13,7 @@ import { VenueHomeService } from '../../core/services/venue-home.service';
 @Component({
   selector: 'app-home',
   standalone:true,
-  imports: [ RouterLink, CommonModule, FormsModule, MapComponent],
+  imports: [ CommonModule, FormsModule, MapComponent],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

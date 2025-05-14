@@ -1,16 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogActions, MatDialogContent, MatDialogTitle, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { CommonModule, formatDate } from '@angular/common';
-import { User } from '@core/models/user.model';
-import { AuthService } from '@core/services/auth.service';
-import { Music } from '@core/models/music.model';
-import { MatIcon } from '@angular/material/icon';
-import { Schedule, DayOfWeek } from '@core/models/schedule.model';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { EventService } from '@core/services/event.service';
@@ -21,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatButton, CommonModule, MatDialogContent, MatIcon,
+    MatDialogTitle, MatInput, MatButton, CommonModule, MatDialogContent,
     MatSelectModule, MatOptionModule, MatDialogActions
   ],
   templateUrl: './event-creation-dialog.component.html'

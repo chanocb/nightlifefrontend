@@ -29,5 +29,12 @@ export class NavComponent{
   logout(): void {
     this.authService.logout();
   }
+
+  goToReservations(): void {
+    this.router.navigate(['/myreservations']);
+  }
+  goToValidate(): void {
+    this.router.navigate(['/validate']);
+  }
  
 }

@@ -39,4 +39,7 @@ import { AccessType } from "@core/models/access-type.model";
       getEventByReference(eventReference: string): Observable<Event> {
         return this.httpService.get(`${EventService.END_POINT}/${eventReference}`);
       }
+      getEventByAccessType(accessType: String): Observable<Event> {
+        return this.httpService.get(`${EventService.END_POINT}/access-type/${accessType}`);
+      }
   }
