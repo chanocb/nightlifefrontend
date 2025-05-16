@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatIcon } from '@angular/material/icon';
 import { Reservation } from '@core/models/reservation.model';
 import { ReservationService } from '@core/services/reservation.service';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
@@ -10,7 +9,7 @@ import { BarcodeFormat } from '@zxing/library';
 @Component({
     selector: 'app-events',
     standalone: true,
-    imports: [CommonModule, MatIcon, ZXingScannerModule],
+    imports: [CommonModule, ZXingScannerModule],
     templateUrl: './validate-reservation.component.html',
   })
 export class ValidatateReservationComponent implements OnInit {
