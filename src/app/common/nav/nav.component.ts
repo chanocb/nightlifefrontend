@@ -16,6 +16,7 @@ export class NavComponent{
 
   isAuthenticated$: Observable<boolean>;
   isOwner$: Observable<boolean>;
+  isClient$: Observable<boolean>;
 
   constructor(
     private router: Router,private authService: AuthService
@@ -23,6 +24,9 @@ export class NavComponent{
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.isOwner$ = this.isAuthenticated$.pipe(
       map((authenticated: any) => authenticated && this.authService.isOwner())
+    );
+    this.isClient$ = this.isAuthenticated$.pipe(
+      map((authenticated: any) => authenticated && !this.authService.isOwner())
     );
   }
   

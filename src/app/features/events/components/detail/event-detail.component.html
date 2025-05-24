@@ -12,6 +12,12 @@
   <div *ngIf="!isLoading && event" class="card shadow-sm">
     <div class="card-header">
       <h2>{{ event.name }}</h2>
+      <div *ngIf="isOwner && canValidate" class="mt-2">
+        <button class="btn btn-primary" (click)="goToValidate()">
+          <mat-icon>check</mat-icon>
+          Validar Reservas
+        </button>
+      </div>
     </div>
     <div class="card-body">
       <p><strong>Descripción:</strong> {{ event.description }}</p>

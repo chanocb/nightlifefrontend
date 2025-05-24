@@ -1,28 +1,71 @@
 <div class="container mt-4">
   <h2 class="mb-4 text-center">Validar reserva</h2>
 
-  <zxing-scanner
-  [formats]="[BarcodeFormat.QR_CODE]"
-  [device]="selectedDevice"
-  (scanSuccess)="onCodeResult($event)">
-</zxing-scanner>
+  <!-- Mensaje de estado -->
+  <div *ngIf="message" class="alert" [ngClass]="{'alert-success': validReservation, 'alert-danger': !validReservation}">
+    {{ message }}
+  </div>
 
-<div *ngIf="validReservation" class="success-message">
-  <h3>Reserva válida</h3>
-  <p>Detalles de la reserva:</p>
-  <ul>
-    <li><strong>ID:</strong> {{ validReservation.reference }}</li>
-    <li><strong>Nombre:</strong> {{ validReservation.user.firstName }}</li>
-    <li><strong>Apellido:</strong> {{ validReservation.user.lastName }}</li>
-    <li><strong>Tipo de acceso:</strong> {{ validReservation.accessType.title }}</li>
-    <li><strong>Estado:</strong> {{ validReservation.status }}</li>
-    <!-- Agrega más detalles según los datos disponibles -->
-  </ul>
+  <!-- Scanner -->
+  <div *ngIf="isCameraActive">
+    <zxing-scanner
+      [formats]="[BarcodeFormat.QR_CODE]"
+      [device]="selectedDevice"
+      (scanSuccess)="onCodeResult($event)">
+    </zxing-scanner>
+  </div>
+
+  <!-- Detalles de la reserva válida -->
+  <div *ngIf="validReservation" class="card mt-4">
+    <div class="card-body">
+      <h3>Detalles de la reserva:</h3>
+      <ul>
+        <li><strong>ID:</strong> {{ validReservation.reference }}</li>
+        <li><strong>Nombre:</strong> {{ validReservation.user.firstName }}</li>
+        <li><strong>Apellido:</strong> {{ validReservation.user.lastName }}</li>
+        <li><strong>Tipo de acceso:</strong> {{ validReservation.accessType.title }}</li>
+        <li><strong>Estado:</strong> {{ validReservation.status }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Botón para reiniciar -->
+  <div *ngIf="!isCameraActive" class="text-center mt-4">
+    <button class="btn btn-primary" (click)="restartScanning()">
+      Escanear otra reserva
+    </button>
+  </div>
 </div>
 
-<div *ngIf="!validReservation && validReservation !== null" class="error-message">
-  <h3>Reserva no válida</h3>
-  <p>El código escaneado no corresponde a una reserva válida.</p>
-</div>
+<style>
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
 
-</div>
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.card-body li {
+  margin-bottom: 0.5rem;
+}
+</style>

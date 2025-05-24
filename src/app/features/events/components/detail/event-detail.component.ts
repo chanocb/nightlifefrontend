@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event.service';
 import { Event } from '@core/models/event.model';
 import { AuthService } from '@core/services/auth.service';
@@ -13,11 +13,12 @@ import { AccessTypeEditDialogComponent } from 'app/features/accesstypes/dialogs/
 import { ReservationService } from '@core/services/reservation.service';
 import { Reservation } from '@core/models/reservation.model';
 import { ReservationStatus } from '@core/models/reservationstatus.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-events',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, MatIconModule],
     templateUrl: './event-detail.component.html',
   })
 export class EventDetailComponent implements OnInit {
@@ -35,11 +36,13 @@ export class EventDetailComponent implements OnInit {
   eventReference: string = '';
   reservationsCreated : Array<AccessType>= [];
   reservationsFailed : Array<AccessType>= [];
+  canValidate: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
     private accessTypeService: AccessTypeService,
     private reservationService: ReservationService,
+    private router: Router,
     authService: AuthService,
     private dialog: MatDialog
   ) {
@@ -59,10 +62,26 @@ export class EventDetailComponent implements OnInit {
     this.isClient = this.authService.isClient();
   }
 
+  private checkIfCanValidate(eventDate: Date): void {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    // Resetear las horas para comparar solo fechas
+    today.setHours(0, 0, 0, 0);
+    tomorrow.setHours(23, 59, 59, 999);
+    const eventDateTime = new Date(eventDate);
+    
+    this.canValidate = eventDateTime >= today && eventDateTime <= tomorrow;
+  }
+
   loadEvent(venueReference: string, eventReference: string): void {
     this.eventService.getEventsByVenueReference(venueReference).subscribe({
       next: (events) => {
         this.event = events.find((e: { reference: string; }) => e.reference === eventReference) || null;
+        if (this.event) {
+          this.checkIfCanValidate(new Date(this.event.dateTime));
+        }
         this.accessTypes = this.event?.accessTypes || [];
         this.accessTypes.sort((a, b) => a.title.localeCompare(b.title));
         this.accessTypes.forEach((accessType) => {
@@ -174,4 +193,10 @@ export class EventDetailComponent implements OnInit {
     };
   });
 }
+
+  goToValidate(): void {
+    if (this.event) {
+      this.router.navigate(['/validate'], { queryParams: { eventReference: this.event.reference } });
+    }
+  }
 }

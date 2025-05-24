@@ -12,6 +12,7 @@ export class HttpService {
   static readonly CONNECTION_REFUSE = 0;
   static readonly UNAUTHORIZED = 401;
   static readonly BAD_REQUEST = 400;
+  static readonly NOT_FOUND = 404;
 
   private headers: HttpHeaders = new HttpHeaders();
   private params: HttpParams = new HttpParams();
@@ -164,6 +165,8 @@ export class HttpService {
     } else if (response.status === HttpService.CONNECTION_REFUSE) {
         this.showError('Connection Refuse');
         return EMPTY;
+    } else if (response.status === HttpService.NOT_FOUND) {
+        return throwError(() => ({ status: 404, message: 'Not found' }));
     } else if (response.status === HttpService.BAD_REQUEST) {
         try {
             error = response.error;
@@ -191,5 +194,5 @@ export class HttpService {
         this.showError('Unexpected error');
         return throwError(() => response.error);
     }
-}
+  }
 }
