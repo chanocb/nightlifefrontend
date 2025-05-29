@@ -1,34 +1,45 @@
-<h2 mat-dialog-title>Editar Evento</h2>
+<div class="p-4">
+  <h2 mat-dialog-title class="mb-4">Edit Event</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="form">
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Nombre del Evento</mat-label>
-      <input matInput formControlName="name" />
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        El nombre es obligatorio.
-      </mat-error>
-    </mat-form-field>
+  <mat-dialog-content>
+    <form [formGroup]="form" class="d-flex flex-column gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Event Name</mat-label>
+        <input matInput formControlName="name" required>
+        <mat-icon matPrefix class="text-primary">event</mat-icon>
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Event name is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-      <mat-error *ngIf="form.get('description')?.hasError('required')">
-        La descripción es obligatoria.
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3" required></textarea>
+        <mat-icon matPrefix class="text-primary">description</mat-icon>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
+          Description is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Fecha y Hora</mat-label>
-      <input matInput type="datetime-local" formControlName="dateTime" />
-      <mat-error *ngIf="form.get('dateTime')?.hasError('required')">
-        La fecha y hora son obligatorias.
-      </mat-error>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Date and Time</mat-label>
+        <input matInput type="datetime-local" formControlName="dateTime" required>
+        <mat-icon matPrefix class="text-primary">schedule</mat-icon>
+        <mat-error *ngIf="form.get('dateTime')?.hasError('required')">
+          Date and time are required
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancelar</button>
-  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">Guardar</button>
-</mat-dialog-actions>
+  <mat-dialog-actions align="end" class="mt-4">
+    <button mat-button (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+      <mat-icon>save</mat-icon>
+      Save Changes
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { User } from '@core/models/user.model';
 import { tap } from 'rxjs/operators';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

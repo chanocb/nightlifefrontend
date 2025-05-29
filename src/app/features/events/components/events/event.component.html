@@ -1,36 +1,73 @@
-<div class="container mt-4">
-  <h2 class="mb-4 text-center">Eventos del Local</h2>
-
-  <div *ngIf="isLoading" class="text-center">
-    <p>Cargando eventos...</p>
-  </div>
-
-  <div *ngIf="!isLoading && events.length === 0" class="alert alert-info">
-    No hay eventos disponibles para este local.
-  </div>
-
-  <div class="text-end mb-3">
-    <button mat-raised-button color="primary" (click)="openCreateEventDialog()">
-      <mat-icon>event</mat-icon>
-      Crear Evento
-    </button>
-  </div>
-
-  <div *ngIf="!isLoading && events.length > 0" class="list-group">
-    <div *ngFor="let event of events" class="list-group-item d-flex justify-content-between align-items-center" (click)="navigateToEvent(event.reference)">
-      <div>
-        <h5>{{ event.name }}</h5>
-        <p>{{ event.description }}</p>
-        <p>{{ event.dateTime | date:'dd \'de\' MMMM \'de\' yyyy, HH:mm' }}</p>
+<div class="container py-4">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Venue Events</h2>
+        <button mat-raised-button color="light" (click)="openCreateEventDialog()">
+          <mat-icon>add_circle</mat-icon>
+          Create Event
+        </button>
       </div>
-      <div class="d-flex gap-2">
-        <button mat-icon-button color="primary" (click)="editEvent(event)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteEvent(event)">
-          <mat-icon>delete</mat-icon>
-        </button>
+    </div>
+
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading events...</p>
+      </div>
+
+      <div *ngIf="!isLoading && events.length === 0" class="text-center py-5">
+        <mat-icon class="text-muted" style="font-size: 48px; height: 48px; width: 48px;">event_busy</mat-icon>
+        <p class="mt-3 text-muted">No events available for this venue.</p>
+      </div>
+
+      <div *ngIf="!isLoading && events.length > 0" class="list-group list-group-flush">
+        <div *ngFor="let event of events" 
+             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-4"
+             (click)="navigateToEvent(event.reference)">
+          <div class="d-flex align-items-center gap-4">
+            <div class="event-date text-center p-3 rounded bg-light">
+              <div class="text-primary fw-bold">{{ event.dateTime | date:'MMM' }}</div>
+              <div class="h3 mb-0">{{ event.dateTime | date:'dd' }}</div>
+              <div class="text-muted small">{{ event.dateTime | date:'HH:mm' }}</div>
+            </div>
+            <div>
+              <h5 class="mb-2">{{ event.name }}</h5>
+              <p class="text-muted mb-2">{{ event.description }}</p>
+              <div class="d-flex align-items-center gap-2 text-muted">
+                <mat-icon class="text-primary" style="font-size: 18px; height: 18px; width: 18px;">schedule</mat-icon>
+                <small>{{ event.dateTime | date:'EEEE, MMMM d, y, HH:mm' }}</small>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-2" (click)="$event.stopPropagation()">
+            <button mat-icon-button color="primary" (click)="editEvent(event)" matTooltip="Edit Event">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteEvent(event)" matTooltip="Delete Event">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+.event-date {
+  min-width: 80px;
+  border: 1px solid #e9ecef;
+}
+.list-group-item {
+  transition: background-color 0.2s ease;
+}
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+.list-group-item:active {
+  background-color: #e9ecef;
+}
+</style>

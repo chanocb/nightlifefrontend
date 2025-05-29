@@ -12,14 +12,12 @@
             Venues
           </a>
         </li>
-         <!-- Mostrar solo si el usuario es OWNER -->
          <li class="nav-item" *ngIf="isOwner$ | async">
           <a class="nav-link" routerLink="myvenues">
             <mat-icon>store</mat-icon>
             My Venues
           </a>
         </li>
-         <!-- Mostrar solo si el usuario es CLIENT -->
          <li class="nav-item" *ngIf="isClient$ | async">
           <a class="nav-link" (click)="goToReservations()">
             <mat-icon>event</mat-icon>
@@ -28,11 +26,10 @@
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
-       <!-- Mostrar si NO está autenticado -->
        <li class="nav-item" *ngIf="!(isAuthenticated$ | async)">
         <a class="nav-link" routerLink="register">
           <mat-icon>person_add</mat-icon>
-          Registrarse
+          Register
         </a>
       </li>
       <li class="nav-item" *ngIf="!(isAuthenticated$ | async)">
@@ -42,7 +39,6 @@
         </a>
       </li>
 
-      <!-- Mostrar si está autenticado -->
       <li class="nav-item" *ngIf="isAuthenticated$ | async">
         <a class="nav-link" (click)="logout()">
           <mat-icon>logout</mat-icon>
@@ -50,8 +46,9 @@
         </a>
       </li>
       <li class="nav-item" *ngIf="isAuthenticated$ | async">
-        <a class="nav-link" routerLink="profile"> <mat-icon>account_circle</mat-icon>
-          Perfil
+        <a class="nav-link" routerLink="profile">
+          <mat-icon>account_circle</mat-icon>
+          Profile
         </a>
       </li>
       

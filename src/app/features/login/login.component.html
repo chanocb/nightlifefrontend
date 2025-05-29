@@ -1,34 +1,64 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
-    <h2 class="text-center mb-4">Iniciar sesión</h2>
+  <div class="card border-0 shadow-sm p-4" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4 text-primary">Login</h2>
 
     <form (ngSubmit)="login()" #loginForm="ngForm">
-      <!-- Email -->
       <div class="mb-3">
-        <label for="email" class="form-label">Correo electrónico</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" placeholder="Ingresa tu correo" required autocomplete="email">
+        <label for="email" class="form-label">Email</label>
+        <div class="input-group">
+          <span class="input-group-text"><mat-icon>email</mat-icon></span>
+          <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" placeholder="Enter your email" required autocomplete="email">
+        </div>
       </div>
 
-      <!-- Contraseña -->
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
         <div class="input-group">
-          <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+          <span class="input-group-text"><mat-icon>lock</mat-icon></span>
+          <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
           <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
-            {{ showPassword ? '🙈' : '👁' }}
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </div>
       </div>
 
-      <!-- Botón de ingresar -->
-      <button type="submit" class="btn btn-primary w-100" [disabled]="!isFormValid">Ingresar</button>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="!isFormValid">
+          <mat-icon>login</mat-icon>
+          Login
+        </button>
+      </div>
     </form>
 
-    <!-- Mostrar mensaje de éxito si el login es correcto -->
-    <div *ngIf="user$ | async as loggedInUser">
-      <div class="alert alert-success mt-3">
-        <strong>Bienvenido:</strong> {{ loggedInUser.email }}
+    <div *ngIf="user$ | async as loggedInUser" class="alert alert-success mt-4">
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-2">check_circle</mat-icon>
+        <div>
+          <strong>Welcome!</strong>
+          <p class="mb-0">{{ loggedInUser.email }}</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+.input-group-text {
+  background-color: transparent;
+  border-right: none;
+}
+.input-group .form-control {
+  border-left: none;
+}
+.input-group .form-control:focus {
+  border-color: #ced4da;
+  box-shadow: none;
+}
+.input-group:focus-within {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  border-color: #86b7fe;
+}
+</style>

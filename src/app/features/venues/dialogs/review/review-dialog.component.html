@@ -1,22 +1,35 @@
-<h2 mat-dialog-title>Reseñas</h2>
-<mat-dialog-content>
-  <ng-container *ngIf="data.reviews && data.reviews.length > 0; else noReviews">
-    <ul>
-        <li *ngFor="let review of data.reviews" class="list-group-item d-flex justify-content-between align-items-start">
+<div class="p-4">
+  <h2 mat-dialog-title class="mb-4">Reviews</h2>
+  
+  <mat-dialog-content>
+    <ng-container *ngIf="data.reviews && data.reviews.length > 0; else noReviews">
+      <div class="d-flex flex-column gap-3">
+        <div *ngFor="let review of data.reviews" class="card p-3">
+          <div class="d-flex justify-content-between align-items-start">
             <div>
-              <p><strong><h2>{{ review.title }}</h2></strong></p>
-              <p><i *ngFor="let star of [].constructor(review.rating)" class="fa fa-star"></i></p>
-              <p>{{ review.opinion }}</p>
-              <p>Escrito por: {{ review.user.firstName }} {{ review.user.lastName }}</p>
+              <h3 class="h5 mb-2">{{ review.title }}</h3>
+              <div class="mb-2">
+                <mat-icon *ngFor="let star of [].constructor(review.rating)" class="text-warning">star</mat-icon>
+              </div>
+              <p class="mb-2">{{ review.opinion }}</p>
+              <small class="text-muted">By {{ review.user.firstName }} {{ review.user.lastName }}</small>
             </div>
-            
-          </li>
-    </ul>
-  </ng-container>
-  <ng-template #noReviews>
-    <p>No hay reseñas disponibles.</p>
-  </ng-template>
-</mat-dialog-content>
-<mat-dialog-actions >
-  <button mat-button mat-dialog-close>Cerrar</button>
-</mat-dialog-actions>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noReviews>
+      <div class="text-center py-4">
+        <mat-icon class="text-muted mb-2" style="font-size: 48px;">rate_review</mat-icon>
+        <p class="text-muted">No reviews available.</p>
+      </div>
+    </ng-template>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="mt-4">
+    <button mat-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

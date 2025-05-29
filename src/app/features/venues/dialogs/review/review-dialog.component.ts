@@ -1,14 +1,24 @@
-import { CommonModule, NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Review } from '@core/models/review.model';
 
 @Component({
   selector: 'app-review-dialog',
+  templateUrl: './review-dialog.component.html',
   standalone: true,
-  imports: [ NgIf,  CommonModule, MatDialogContent, MatDialogActions, MatDialogModule],
-  templateUrl: './review-dialog.component.html'
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule
+  ]
 })
 export class ReviewDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { reviews: Review[] }) {}
+  constructor(
+    public dialogRef: MatDialogRef<ReviewDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { reviews: Review[] }
+  ) {}
 }

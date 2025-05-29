@@ -67,14 +67,13 @@ export class VenueDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
     const reference = this.route.snapshot.paramMap.get('venueReference');
     if (reference) {
       this.venueService.getVenueByReference(reference).subscribe({
         next: (venue) => {
           this.venue = venue;
           this.loadVenueDataIntoForm(venue);
-          this.isOwner = this.authService.isOwner(); // Verificamos si el usuario es un OWNER
+          this.isOwner = this.authService.isOwner();
 
           const userEmail = this.authService.getUserEmail();
           this.isOwner = this.authService.isOwner() && venue.user.email === userEmail;
@@ -91,13 +90,13 @@ export class VenueDetailComponent implements OnInit {
               this.updateAverageRating();
             },
             error: (error) => {
-              console.error('🔴 Error al cargar las reseñas:', error);
+              console.error('🔴 Error loading reviews:', error);
             }
           });
         },
         error: (error) => {
-          this.error = 'Error al cargar el venue.';
-          console.error('🔴 Error al cargar el venue:', error);
+          this.error = 'Error loading venue.';
+          console.error('🔴 Error loading venue:', error);
         }
       });
 
@@ -107,7 +106,7 @@ export class VenueDetailComponent implements OnInit {
           this.cdRef.markForCheck();
         },
         error: (error) => {
-          console.error('🔴 Error al cargar los eventos:', error);
+          console.error('🔴 Error loading events:', error);
         }
       });
     }
@@ -124,8 +123,8 @@ export class VenueDetailComponent implements OnInit {
 
   toggleEditMode(): void {
     if (!this.isOwner) {
-      this.error = 'No tienes permiso para editar este venue.'; // Mostrar mensaje de error si no es el Owner
-      return; // No permitimos la edición si no es el propietario
+      this.error = 'You do not have permission to edit this venue.';
+      return;
     }
     this.isEditing = !this.isEditing;
     if (!this.isEditing && this.venue) {
@@ -136,21 +135,20 @@ export class VenueDetailComponent implements OnInit {
   saveVenue(): void {
     if (this.venueForm.valid && this.venue !== null) {
       const updatedVenue = { ...this.venue, ...this.venueForm.getRawValue(), LGTBFriendly: !!this.venueForm.value.LGTBFriendly };
-      console.log('🔍 Datos enviados al backend:', updatedVenue);
+      console.log('🔍 Data sent to backend:', updatedVenue);
       this.venueService.updateVenue(this.venue.reference, updatedVenue).subscribe({
         next: (venue) => {
-          console.log('🟢 Venue actualizado:', this.venue);
+          console.log('🟢 Venue updated:', this.venue);
           this.venue = venue;
           this.isEditing = false;
           this.cdRef.markForCheck();
         },
         error: (error) => {
-          this.error = 'Error al actualizar el venue.';
-          console.error('🔴 Error al actualizar el venue:', error);
+          this.error = 'Error updating venue.';
+          console.error('🔴 Error updating venue:', error);
         }
       });
     }
-
   }
 
   deleteVenue() {
@@ -178,7 +176,7 @@ export class VenueDetailComponent implements OnInit {
   getMusicGenres(venue: Venue): string {
     return venue.musicGenres && venue.musicGenres.length
       ? venue.musicGenres.join(', ')
-      : 'No disponible';
+      : 'Not available';
   }
 
   setRating(rating: number): void {
@@ -199,25 +197,24 @@ export class VenueDetailComponent implements OnInit {
   
           this.reviewService.createReview(review).subscribe({
             next: (response) => {
-              console.log('🟢 Reseña guardada correctamente', response);
-              // Limpiar los campos después de enviar la reseña
+              console.log('🟢 Review saved successfully', response);
+              // Clear fields after submitting review
               this.reviewTitle = '';
               this.reviewOpinion = '';
               this.rating = 5;
               this.cdRef.markForCheck();
               this.reviews = [...this.reviews, response];
-              //this.reviews.push(response); // Agregar la nueva reseña a la lista
               this.updateAverageRating();
             },
             error: (error) => {
-              this.error = 'Error al enviar la reseña.';
-              console.error('🔴 Error al enviar la reseña:', error);
+              this.error = 'Error submitting review.';
+              console.error('🔴 Error submitting review:', error);
             }
           });
         },
         error: (error) => {
-          this.error = 'Error al obtener el perfil del usuario.';
-          console.error('🔴 Error al obtener perfil:', error);
+          this.error = 'Error getting user profile.';
+          console.error('🔴 Error getting profile:', error);
         }
       });
     }
@@ -238,20 +235,19 @@ export class VenueDetailComponent implements OnInit {
     }
   }
 
-  deleteReview(reference: string){
+  deleteReview(reference: string) {
     this.reviewService.deleteReview(reference).subscribe({
       next: () => {
-        console.log('🟢 Reseña eliminada correctamente');
+        console.log('🟢 Review deleted successfully');
         this.reviews = this.reviews.filter(review => review.reference !== reference);
         this.updateAverageRating();
         this.cdRef.markForCheck();
       },
       error: (err) => {
-        this.error = "Error al eliminar la reseña.";
+        this.error = "Error deleting review.";
         console.error(err);
       }
     });
-
   }
 
   private loadSchedules(reference: string): void {
@@ -261,7 +257,7 @@ export class VenueDetailComponent implements OnInit {
         this.cdRef.markForCheck();
       },
       error: (error) => {
-        console.error('🔴 Error al cargar los horarios:', error);
+        console.error('🔴 Error loading schedules:', error);
       }
     });
   }

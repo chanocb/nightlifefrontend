@@ -10,13 +10,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { EventService } from '@core/services/event.service';
 import { VenueHomeService } from '@core/services/venue-home.service';
 import { firstValueFrom } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
     MatDialogTitle, MatInput, MatButton, CommonModule, MatDialogContent,
-    MatSelectModule, MatOptionModule, MatDialogActions
+    MatSelectModule, MatOptionModule, MatDialogActions, MatIconModule
   ],
   templateUrl: './event-creation-dialog.component.html'
 })

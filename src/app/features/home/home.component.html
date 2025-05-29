@@ -1,20 +1,58 @@
-<main class="container mt-5">
-  <div class="row">
-    <div class="col-md-8">
-      <h2 class="text-center">Locales ({{ (venues$ | async)?.length }} encontrados)</h2>
-      <div class="row">
-        <div class="col-md-6 mb-3" *ngFor="let venue of (venues$ | async)">
-          <div class="card h-100" (click)="goToDetails(venue.reference)">
-            <img [src]="venue.imageUrl" alt="Imagen de {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+<main class="container py-4">
+  <div class="row g-4">
+    <!-- Venues List -->
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 mb-0">Venues</h2>
+        <span class="badge bg-primary">
+          {{ (venues$ | async)?.length || 0 }} venues
+        </span>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-sm-6" *ngFor="let venue of (venues$ | async)">
+          <div class="card h-100 border shadow-sm" 
+               (click)="goToDetails(venue.reference)"
+               style="cursor: pointer; transition: transform 0.2s;">
+            <img [src]="venue.imageUrl" 
+                 [alt]="venue.name" 
+                 class="card-img-top" 
+                 style="height: 180px; object-fit: cover;">
             <div class="card-body">
-              <h5 class="card-title text-center">{{ venue.name }}</h5>
+              <h5 class="card-title mb-2">{{ venue.name }}</h5>
+              <div class="d-flex gap-2 mb-2">
+                <span *ngIf="venue.LGTBFriendly" class="badge bg-info">LGTB Friendly</span>
+                <span *ngFor="let genre of venue.musicGenres.slice(0, 2)" 
+                      class="badge bg-light text-dark">
+                  {{ genre }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div *ngIf="!(venues$ | async)?.length" class="text-center py-5">
+        <p class="text-muted mb-0">No venues available at the moment.</p>
+      </div>
     </div>
-    <div class="col-md-4 d-flex align-items-stretch">
-      <app-map [venues]="(venues$ | async) || []" class="w-100" style="height: 600px;"></app-map>
+
+    <!-- Map -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-0">
+          <app-map [venues]="(venues$ | async) || []" 
+                  class="w-100" 
+                  style="height: 600px;">
+          </app-map>
+        </div>
+      </div>
     </div>
   </div>
 </main>
+
+<style>
+.card:hover {
+  transform: translateY(-3px);
+}
+</style>

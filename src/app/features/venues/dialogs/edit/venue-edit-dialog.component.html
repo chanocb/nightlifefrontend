@@ -1,115 +1,226 @@
-<h2 mat-dialog-title>Editar Venue</h2>
+<div class="dialog-container p-4">
+  <h2 mat-dialog-title class="mb-4">Edit Venue</h2>
 
-<mat-dialog-content>
-  <mat-form-field appearance="fill">
-    <mat-label>Nombre</mat-label>
-    <input matInput [(ngModel)]="venue.name" />
-  </mat-form-field>
+  <mat-dialog-content>
+    <form class="d-flex flex-column gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="venue.name" name="name" required>
+        <mat-icon matPrefix class="text-primary">business</mat-icon>
+      </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Teléfono</mat-label>
-    <input matInput [(ngModel)]="venue.phone" />
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput [(ngModel)]="venue.phone" name="phone">
+        <mat-icon matPrefix class="text-primary">phone</mat-icon>
+      </mat-form-field>
 
-  <mat-checkbox [(ngModel)]="venue.LGTBFriendly">Es LGBT Friendly</mat-checkbox>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Instagram</mat-label>
-    <input matInput [(ngModel)]="venue.instagram" />
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Imagen URL</mat-label>
-    <input matInput [(ngModel)]="venue.imageUrl" />
-  </mat-form-field>
-
-  <div style="width: 100%; margin-top: 10px;">
-    <mat-label>Géneros Musicales</mat-label>
-    <div *ngFor="let genre of musicGenres; let i = index" style="margin-bottom: 5px;">
-      <mat-checkbox [formControl]="musicGenresControls.at(i)">
-        {{ genre }}
+      <mat-checkbox [(ngModel)]="venue.LGTBFriendly" name="LGTBFriendly" color="primary">
+        LGBTQ+ Friendly
       </mat-checkbox>
-    </div>
-  </div>
 
-  <div style="width: 100%; margin-top: 10px;">
-    <mat-label>Productos</mat-label>
-    <button mat-button (click)="addProduct()">Agregar Producto</button>
-    <div *ngFor="let product of venue.products; let i = index" style="margin-bottom: 10px; position: relative; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background-color: #f9f9f9;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1;">
-          <mat-form-field appearance="fill" style="width: 45%; margin-right: 10px;">
-            <mat-label>Nombre del producto</mat-label>
-            <input matInput [(ngModel)]="venue.products[i].name" />
+      <mat-form-field appearance="outline">
+        <mat-label>Instagram</mat-label>
+        <input matInput [(ngModel)]="venue.instagram" name="instagram">
+        <mat-icon matPrefix class="text-primary">link</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Image URL</mat-label>
+        <input matInput [(ngModel)]="venue.imageUrl" name="imageUrl">
+        <mat-icon matPrefix class="text-primary">image</mat-icon>
+      </mat-form-field>
+
+      <div class="section-container">
+        <h3 class="section-title">Music Genres</h3>
+        <div class="genres-grid">
+          <mat-checkbox *ngFor="let genre of musicGenres; let i = index" 
+                       [formControl]="musicGenresControls.at(i)"
+                       color="primary">
+            {{ genre }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="section-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="section-title mb-0">Products</h3>
+          <button mat-raised-button color="primary" (click)="addProduct()">
+            <mat-icon>add</mat-icon>
+            Add Product
+          </button>
+        </div>
+        <div class="products-list">
+          <div *ngFor="let product of venue.products; let i = index" class="product-card">
+            <div class="product-header">
+              <button mat-icon-button color="warn" (click)="removeProduct(i)" matTooltip="Remove Product">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div class="product-content">
+              <mat-form-field appearance="outline">
+                <mat-label>Product Name</mat-label>
+                <input matInput [(ngModel)]="venue.products[i].name" [name]="'productName' + i">
+                <mat-icon matPrefix class="text-primary">inventory_2</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input matInput type="number" [(ngModel)]="venue.products[i].price" 
+                       [name]="'productPrice' + i" min="0" (input)="validatePrice(i)">
+                <mat-icon matPrefix class="text-primary">euro</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-container">
+        <h3 class="section-title">Location</h3>
+        <div class="coordinates-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Latitude</mat-label>
+            <input matInput type="number" [(ngModel)]="venue.coordinate.latitude" name="latitude">
+            <mat-icon matPrefix class="text-primary">place</mat-icon>
           </mat-form-field>
 
-          <mat-form-field appearance="fill" style="width: 45%;">
-            <mat-label>Precio</mat-label>
-            <input matInput type="number" [(ngModel)]="venue.products[i].price" min="0" (input)="validatePrice(i)"/>
+          <mat-form-field appearance="outline">
+            <mat-label>Longitude</mat-label>
+            <input matInput type="number" [(ngModel)]="venue.coordinate.longitude" name="longitude">
+            <mat-icon matPrefix class="text-primary">place</mat-icon>
           </mat-form-field>
         </div>
-
-        <button mat-icon-button color="warn" (click)="removeProduct(i)" 
-                style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: #fff; border-radius: 50%; padding: 5px;">
-          <mat-icon>close</mat-icon>
-        </button>
       </div>
-    </div>
-  </div>
 
-  <!-- Coordenadas -->
-  <div style="width: 100%; margin-top: 10px;">
-    <mat-label>Coordenadas</mat-label>
-
-    <mat-form-field appearance="fill" style="width: 100%;">
-      <mat-label>Latitud</mat-label>
-      <input matInput type="number" [(ngModel)]="venue.coordinate.latitude" />
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" style="width: 100%;">
-      <mat-label>Longitud</mat-label>
-      <input matInput type="number" [(ngModel)]="venue.coordinate.longitude" />
-    </mat-form-field>
-  </div>
-
-  <!-- Horarios -->
-  <div style="width: 100%; margin-top: 10px;">
-    <mat-label>Horarios</mat-label>
-    <button mat-button (click)="addSchedule()">Agregar Horario</button>
-    <div *ngFor="let schedule of schedules; let i = index" style="margin-bottom: 10px; position: relative; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background-color: #f9f9f9;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1;">
-          <mat-form-field appearance="fill" style="width: 30%; margin-right: 10px;">
-            <mat-label>Día de la semana</mat-label>
-            <mat-select [(ngModel)]="schedule.dayOfWeek">
-              <mat-option *ngFor="let day of daysOfWeek" [value]="day">
-                {{ day }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" style="width: 30%; margin-right: 10px;">
-            <mat-label>Hora de inicio</mat-label>
-            <input matInput type="time" [(ngModel)]="schedule.startTime" />
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" style="width: 30%;">
-            <mat-label>Hora de fin</mat-label>
-            <input matInput type="time" [(ngModel)]="schedule.endTime" />
-          </mat-form-field>
+      <div class="section-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="section-title mb-0">Schedule</h3>
+          <button mat-raised-button color="primary" (click)="addSchedule()">
+            <mat-icon>add</mat-icon>
+            Add Schedule
+          </button>
         </div>
+        <div class="schedules-list">
+          <div *ngFor="let schedule of schedules; let i = index" class="schedule-card">
+            <div class="schedule-header">
+              <button mat-icon-button color="warn" (click)="removeSchedule(i)" matTooltip="Remove Schedule">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div class="schedule-content">
+              <mat-form-field appearance="outline">
+                <mat-label>Day of Week</mat-label>
+                <mat-select [(ngModel)]="schedule.dayOfWeek" [name]="'scheduleDay' + i">
+                  <mat-option *ngFor="let day of daysOfWeek" [value]="day">
+                    {{ day }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matPrefix class="text-primary">calendar_today</mat-icon>
+              </mat-form-field>
 
-        <button mat-icon-button color="warn" (click)="removeSchedule(i)" 
-                style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: #fff; border-radius: 50%; padding: 5px;">
-          <mat-icon>close</mat-icon>
-        </button>
+              <mat-form-field appearance="outline">
+                <mat-label>Start Time</mat-label>
+                <input matInput type="time" [(ngModel)]="schedule.startTime" [name]="'scheduleStart' + i">
+                <mat-icon matPrefix class="text-primary">schedule</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>End Time</mat-label>
+                <input matInput type="time" [(ngModel)]="schedule.endTime" [name]="'scheduleEnd' + i">
+                <mat-icon matPrefix class="text-primary">schedule</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </form>
+  </mat-dialog-content>
 
-</mat-dialog-content>
+  <mat-dialog-actions align="end" class="mt-4">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSave()">Save Changes</button>
+  </mat-dialog-actions>
+</div>
 
-<mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-button (click)="onSave()" color="primary">Guardar</button>
-</mat-dialog-actions>
+<style>
+.dialog-container {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.section-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  color: #495057;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.genres-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem;
+}
+
+.products-list, .schedules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-card, .schedule-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.product-header, .schedule-header {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+}
+
+.product-content, .schedule-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.coordinates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>

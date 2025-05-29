@@ -12,6 +12,7 @@ import { BarcodeFormat } from '@zxing/library';
     imports: [CommonModule, ZXingScannerModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './validate-reservation.component.html',
+    styleUrls: ['./validate-reservation.component.css']
 })
 export class ValidatateReservationComponent implements OnInit {
   reservations: Reservation[] = [];
@@ -35,30 +36,50 @@ export class ValidatateReservationComponent implements OnInit {
         const videoDevices = devices.filter(device => device.kind === 'videoinput');
         if (videoDevices.length > 0) {
           this.selectedDevice = videoDevices[0];
+          const constraints = {
+            video: {
+              deviceId: this.selectedDevice.deviceId,
+              facingMode: { exact: 'environment' },
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          };
+          navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+              const videoElement = document.querySelector('zxing-scanner video') as HTMLVideoElement;
+              if (videoElement) {
+                videoElement.srcObject = stream;
+                videoElement.setAttribute('playsinline', 'true');
+                videoElement.style.transform = 'rotate(180deg)';
+              }
+            })
+            .catch(err => {
+              this.message = 'Error accessing camera';
+              this.isCameraActive = false;
+            });
         }
       })
       .catch(err => {
-        this.message = 'Error al acceder a la cámara';
+        this.message = 'Error accessing camera';
         this.isCameraActive = false;
       });
   }
 
-  onCodeResult(result: string) {
+  onCodeResult(result: any) {
     if (!this.isCameraActive) return;
 
-    this.reservationService.validateReservation(result).subscribe({
+    this.reservationService.validateReservation(result.toString()).subscribe({
       next: (reservation) => {
         this.validReservation = reservation;
-        this.message = 'Reserva validada correctamente';
+        this.message = 'Reservation successfully validated';
         this.isCameraActive = false;
       },
       error: (error) => {
-        if (error.status === 404) {
-          this.message = 'Reserva no encontrada';
-        } else if (error.error?.message === 'Reservation already validated') {
-          this.message = 'Esta reserva no es válida para hoy o ya ha sido utilizada';
+       
+         if (error.status === 404) {
+          this.message = 'Reservation already validated or not found';
         } else {
-          this.message = 'Error al validar la reserva';
+          this.message = 'Error validating reservation';
         }
         this.validReservation = undefined;
         this.isCameraActive = false;

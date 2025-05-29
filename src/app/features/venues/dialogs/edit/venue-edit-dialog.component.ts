@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogActions, MatDialogContent, MatDialogTitle, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -13,13 +13,27 @@ import { Schedule, DayOfWeek } from '@core/models/schedule.model';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { VenueHomeService } from '@core/services/venue-home.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
+  selector: 'app-venue-edit-dialog',
   standalone: true,
   imports: [
-    FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatButton, MatCheckbox, CommonModule, MatDialogContent, MatIconModule,
-    MatSelectModule, MatTimepickerModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatDialogActions,
+    MatDialogTitle,
+    MatInput,
+    MatButton,
+    MatCheckbox,
+    CommonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatTimepickerModule,
+    MatTooltipModule
   ],
   templateUrl: './venue-edit-dialog.component.html',
   styleUrls: ['../../venues.component.css']

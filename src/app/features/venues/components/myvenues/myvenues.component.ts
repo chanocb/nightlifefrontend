@@ -16,11 +16,13 @@ import { Review } from '@core/models/review.model';
 import { ReviewService } from '@core/services/review.service';
 import { Router } from '@angular/router';
 import { Schedule } from '@core/models/schedule.model';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-myvenues',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MatDialogModule],
+  imports: [ReactiveFormsModule, NgIf, MatCheckboxModule, MatIconModule, CommonModule, MatDialogModule, MatButtonModule, MatTooltipModule],
   templateUrl: './myvenues.component.html',
   styleUrls: ['../../venues.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,7 +71,7 @@ export class MyVenuesComponent implements OnInit {
         this.venuesSubject.next([...this.venuesSubject.value]);
       },
       error: (error) => {
-        console.error('Error al cargar los venues o sus horarios:', error);
+        console.error('Error loading venues or schedules:', error);
       }
     });
   }
@@ -100,7 +102,7 @@ export class MyVenuesComponent implements OnInit {
               this.venuesSubject.next([...this.venuesSubject.value]);
             },
             error: (error) => {
-              console.error('Error al actualizar los horarios:', error);
+              console.error('Error updating schedules:', error);
             }
           });
         }
@@ -117,7 +119,7 @@ export class MyVenuesComponent implements OnInit {
         this.venuesSubject.next(updatedVenues);
       },
       error: (error) => {
-        console.error('Error al actualizar el venue:', error);
+        console.error('Error updating venue:', error);
       }
     });
   }
@@ -143,7 +145,7 @@ export class MyVenuesComponent implements OnInit {
         delete this.venueSchedules[venue.reference];
       },
       error: (error) => {
-        console.error('Error al eliminar el venue:', error);
+        console.error('Error deleting venue:', error);
       }
     });
   }
@@ -151,7 +153,7 @@ export class MyVenuesComponent implements OnInit {
   getMusicGenres(venue: Venue): string {
     return venue.musicGenres && venue.musicGenres.length
       ? venue.musicGenres.join(', ')
-      : 'No disponible';
+      : 'Not available';
   }
 
   openReviewsDialog(venueReference: string): void {
@@ -163,7 +165,7 @@ export class MyVenuesComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error al cargar las reseñas:', error);
+        console.error('Error loading reviews:', error);
       }
     });
   }

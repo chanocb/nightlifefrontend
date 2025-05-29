@@ -143,4 +143,8 @@ export class VenueCreateDialogComponent {
       });
     }
   }
+
+  cancel(): void {
+    this.dialog.close();
+  }
 }

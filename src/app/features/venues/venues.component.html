@@ -1,33 +1,37 @@
-<div class="container-fluid mt-4">
-  <h2 class="text-center mb-4">Venues ({{ (venues$ | async)?.length }} found)</h2>
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3 mb-0">Venues</h2>
+    <span class="badge bg-primary">{{ (venues$ | async)?.length }} venues</span>
+  </div>
 
-  <div class="row">
-    <!-- Filter Section (1/3 width) -->
-    <div class="col-12 col-md-4 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-primary text-white py-3">
           <h5 class="mb-0">Filters</h5>
         </div>
         <div class="card-body">
           <div class="mb-4">
-            <h6 class="text-muted mb-3">Music</h6>
-            <div class="form-check" *ngFor="let music of musicTypes">
-              <input class="form-check-input" type="checkbox" [id]="'music-' + music" [(ngModel)]="selectedMusic[music]" (change)="onMusicFilterChange()">
-              <label class="form-check-label" [for]="'music-' + music">{{ music | titlecase }}</label>
+            <h6 class="text-primary mb-3">Music Genres</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <div class="form-check" *ngFor="let music of musicTypes">
+                <input class="form-check-input" type="checkbox" [id]="'music-' + music" [(ngModel)]="selectedMusic[music]" (change)="onMusicFilterChange()">
+                <label class="form-check-label" [for]="'music-' + music">{{ music | titlecase }}</label>
+              </div>
             </div>
           </div>
 
           <div class="mb-4">
-            <h6 class="text-muted mb-3">Minimum Rating</h6>
-            <div class="d-flex align-items-center">
-              <input type="range" class="form-range flex-grow-1 me-2" min="0" max="5" step="0.5" [(ngModel)]="minRating" (change)="onRatingChange()">
-              <span class="badge bg-primary">{{ minRating }}</span>
+            <h6 class="text-primary mb-3">Rating</h6>
+            <div class="d-flex align-items-center gap-2">
+              <input type="range" class="form-range flex-grow-1" min="0" max="5" step="0.5" [(ngModel)]="minRating" (change)="onRatingChange()">
+              <span class="badge bg-info" style="min-width: 40px;">{{ minRating }}</span>
             </div>
           </div>
 
           <div class="mb-4">
-            <h6 class="text-muted mb-3">Products</h6>
-            <div class="mb-2">
+            <h6 class="text-primary mb-3">Products</h6>
+            <div class="mb-3">
               <select class="form-select" [(ngModel)]="selectedProduct" (change)="onProductFilterChange()">
                 <option value="">Select a product</option>
                 <option *ngFor="let product of availableProducts" [value]="product.name">
@@ -36,14 +40,13 @@
               </select>
             </div>
             <div class="input-group">
-              <span class="input-group-text">Max price</span>
               <input type="number" class="form-control" placeholder="Max price" [(ngModel)]="maxPrice" min="0" step="0.01" (change)="onProductFilterChange()">
-              <span class="input-group-text">€</span>
+              <span class="input-group-text bg-info text-white">€</span>
             </div>
           </div>
 
           <div class="mb-4">
-            <h6 class="text-muted mb-3">LGTB Friendly</h6>
+            <h6 class="text-primary mb-3">LGTB Friendly</h6>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" id="lgtb-friendly" [(ngModel)]="isLGTBFriendly" (change)="onLGTBFriendlyChange()">
               <label class="form-check-label" for="lgtb-friendly">Show only LGTB friendly venues</label>
@@ -53,18 +56,34 @@
       </div>
     </div>
 
-    <!-- Venues Section (2/3 width) -->
     <div class="col-12 col-md-8">
-      <div class="row">
-        <div class="col-12 col-sm-6 mb-3" *ngFor="let venue of (venues$ | async)">
-          <div class="card h-100" (click)="goToDetails(venue.reference)">
-            <img [src]="venue.imageUrl" alt="Image of {{ venue.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+      <div class="row g-4">
+        <div class="col-12 col-sm-6" *ngFor="let venue of (venues$ | async)">
+          <div class="card h-100 border shadow-sm" (click)="goToDetails(venue.reference)" style="cursor: pointer; transition: transform 0.2s;">
+            <img [src]="venue.imageUrl" [alt]="venue.name" class="card-img-top" style="height: 180px; object-fit: cover;">
             <div class="card-body">
-              <h5 class="card-title text-center">{{ venue.name }}</h5>
+              <h5 class="card-title mb-2">{{ venue.name }}</h5>
+              <div class="d-flex gap-2">
+                <span *ngIf="venue.LGTBFriendly" class="badge bg-info">LGTB Friendly</span>
+                <span *ngFor="let genre of venue.musicGenres.slice(0, 2)" 
+                      class="badge bg-light text-dark">
+                  {{ genre }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div *ngIf="!(venues$ | async)?.length" class="text-center py-5">
+        <p class="text-muted mb-0">No venues match your filters.</p>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+.card:hover {
+  transform: translateY(-3px);
+}
+</style>

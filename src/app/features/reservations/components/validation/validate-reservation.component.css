@@ -1,0 +1,19 @@
+zxing-scanner {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+zxing-scanner video {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  transform-origin: center center;
+}
+
+.scanner-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+}

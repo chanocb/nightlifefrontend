@@ -1,92 +1,130 @@
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Mis Locales</h2>
+<div class="container py-4">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">My Venues</h2>
+        <button *ngIf="isOwner" (click)="create()" class="btn btn-light" mat-raised-button>
+          <mat-icon>add_circle</mat-icon>
+          Create Venue
+        </button>
+      </div>
+    </div>
 
-  <div class="d-flex justify-content-end mb-3">
-    <button *ngIf="isOwner" (click)="create()" mat-raised-button color="primary" class="d-flex align-items-center">
-      <mat-icon class="mr-2">add_circle</mat-icon>
-      <span>Crear Venue</span>
-    </button>
-  </div>
-
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Nombre</th>
-          <th scope="col">Teléfono</th>
-          <th scope="col">Es LGBT</th>
-          <th scope="col">Instagram</th>
-          <th scope="col">Imagen</th>
-          <th scope="col">Géneros Musicales</th>
-          <th scope="col">Coordenadas</th>
-          <th scope="col">Horarios</th>
-          <th scope="col">Eventos</th>
-          <th scope="col">Reseñas</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let venue of (venues$ | async)">
-          <td>{{ venue.name }}</td>
-          <td>{{ venue.phone }}</td>
-          <td>{{ venue.LGTBFriendly ? 'Sí' : 'No' }}</td>
-          <td>
-            <a *ngIf="venue.instagram" [href]="'https://instagram.com/' + venue.instagram" target="_blank" class="text-decoration-none">
-              {{ venue.instagram }}
-            </a>
-            <span *ngIf="!venue.instagram">No disponible</span>
-          </td>
-          <td>
-            <a *ngIf="venue.imageUrl" [href]="venue.imageUrl" target="_blank">
-              link
-            </a>
-            <span *ngIf="!venue.imageUrl">No disponible</span>
-          </td>
-          <td>
-            <ng-container *ngIf="venue.musicGenres.length > 0; else noGenres">
-              {{ venue.musicGenres.join(', ') }}
-            </ng-container>
-            <ng-template #noGenres>
-              <span>No disponible</span>
-            </ng-template>
-          </td>
-          <td>
-            <span *ngIf="venue.coordinate">
-              Lat: {{ venue.coordinate.latitude }}, Long: {{ venue.coordinate.longitude }}
-            </span>
-            <span *ngIf="!venue.coordinate">No disponible</span>
-          </td>
-          <td>
-            <div *ngIf="venueSchedules && venueSchedules[venue.reference] && venueSchedules[venue.reference].length > 0" class="schedule-list">
-              <div *ngFor="let schedule of venueSchedules[venue.reference]" class="schedule-item">
-                <span class="day">{{ schedule.dayOfWeek }}</span>
-                <span class="time">{{ schedule.startTime }} - {{ schedule.endTime }}</span>
-              </div>
-            </div>
-            <span *ngIf="!venueSchedules || !venueSchedules[venue.reference] || venueSchedules[venue.reference].length === 0" class="no-schedules">
-              No disponible
-            </span>
-          </td>
-          <td class="text-center">
-            <button mat-icon-button color="primary" (click)="openEventsDialog(venue.reference)">
-              <mat-icon>event</mat-icon>
-            </button>
-          </td>
-          <td class="text-center">
-            <button mat-icon-button color="primary" (click)="openReviewsDialog(venue.reference)">
-              <mat-icon>rate_review</mat-icon>
-            </button>
-          </td>
-          <td class="text-center">
-            <button mat-icon-button color="accent" class="mr-2" (click)="openEditDialog(venue)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="openDeleteDialog(venue)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>LGBTQ+</th>
+              <th>Instagram</th>
+              <th>Image</th>
+              <th>Music Genres</th>
+              <th>Location</th>
+              <th>Schedule</th>
+              <th class="text-center">Events</th>
+              <th class="text-center">Reviews</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let venue of (venues$ | async)">
+              <td class="align-middle">{{ venue.name }}</td>
+              <td class="align-middle">{{ venue.phone }}</td>
+              <td class="align-middle">
+                <span class="badge" [ngClass]="venue.LGTBFriendly ? 'bg-success' : 'bg-secondary'">
+                  {{ venue.LGTBFriendly ? 'Yes' : 'No' }}
+                </span>
+              </td>
+              <td class="align-middle">
+                <a *ngIf="venue.instagram" [href]="'https://instagram.com/' + venue.instagram" target="_blank" class="text-decoration-none">
+                  <mat-icon class="text-primary">link</mat-icon>
+                  {{ venue.instagram }}
+                </a>
+                <span *ngIf="!venue.instagram" class="text-muted">Not available</span>
+              </td>
+              <td class="align-middle">
+                <a *ngIf="venue.imageUrl" [href]="venue.imageUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                  <mat-icon>image</mat-icon>
+                  View
+                </a>
+                <span *ngIf="!venue.imageUrl" class="text-muted">Not available</span>
+              </td>
+              <td class="align-middle">
+                <div *ngIf="venue.musicGenres.length > 0; else noGenres" class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let genre of venue.musicGenres" class="badge bg-info">{{ genre }}</span>
+                </div>
+                <ng-template #noGenres>
+                  <span class="text-muted">Not available</span>
+                </ng-template>
+              </td>
+              <td class="align-middle">
+                <span *ngIf="venue.coordinate" class="text-nowrap">
+                  <mat-icon class="text-primary">location_on</mat-icon>
+                  {{ venue.coordinate.latitude | number:'1.4-4' }}, {{ venue.coordinate.longitude | number:'1.4-4' }}
+                </span>
+                <span *ngIf="!venue.coordinate" class="text-muted">Not available</span>
+              </td>
+              <td class="align-middle">
+                <div *ngIf="venueSchedules && venueSchedules[venue.reference] && venueSchedules[venue.reference].length > 0" class="schedule-list">
+                  <div *ngFor="let schedule of venueSchedules[venue.reference]" class="d-flex align-items-center gap-2 mb-1">
+                    <mat-icon class="text-primary">schedule</mat-icon>
+                    <span class="text-nowrap">{{ schedule.dayOfWeek }} {{ schedule.startTime }} - {{ schedule.endTime }}</span>
+                  </div>
+                </div>
+                <span *ngIf="!venueSchedules || !venueSchedules[venue.reference] || venueSchedules[venue.reference].length === 0" class="text-muted">
+                  Not available
+                </span>
+              </td>
+              <td class="text-center align-middle">
+                <button mat-icon-button color="primary" (click)="openEventsDialog(venue.reference)" matTooltip="View Events">
+                  <mat-icon>event</mat-icon>
+                </button>
+              </td>
+              <td class="text-center align-middle">
+                <button mat-icon-button color="primary" (click)="openReviewsDialog(venue.reference)" matTooltip="View Reviews">
+                  <mat-icon>rate_review</mat-icon>
+                </button>
+              </td>
+              <td class="text-center align-middle">
+                <div class="btn-group">
+                  <button mat-icon-button color="primary" (click)="openEditDialog(venue)" matTooltip="Edit Venue">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="openDeleteDialog(venue)" matTooltip="Delete Venue">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+.table > :not(caption) > * > * {
+  padding: 1rem;
+}
+.schedule-list {
+  max-height: 120px;
+  overflow-y: auto;
+}
+.schedule-list::-webkit-scrollbar {
+  width: 4px;
+}
+.schedule-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.schedule-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.75em;
+}
+</style>

@@ -1,23 +1,45 @@
-<h2 mat-dialog-title>Crear Evento</h2>
-<mat-dialog-content>
-  <form [formGroup]="form">
-    <mat-form-field class="w-100">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="name">
-    </mat-form-field>
+<div class="p-4">
+  <h2 mat-dialog-title class="mb-4">Create Event</h2>
 
-    <mat-form-field class="w-100">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
+  <mat-dialog-content>
+    <form [formGroup]="form" class="d-flex flex-column gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Event Name</mat-label>
+        <input matInput formControlName="name" required>
+        <mat-icon matPrefix class="text-primary">event</mat-icon>
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Event name is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="w-100">
-      <mat-label>Fecha y hora</mat-label>
-      <input matInput type="datetime-local" formControlName="dateTime">
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="create()" [disabled]="form.invalid">Crear</button>
-</mat-dialog-actions>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3" required></textarea>
+        <mat-icon matPrefix class="text-primary">description</mat-icon>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
+          Description is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date and Time</mat-label>
+        <input matInput type="datetime-local" formControlName="dateTime" required>
+        <mat-icon matPrefix class="text-primary">schedule</mat-icon>
+        <mat-error *ngIf="form.get('dateTime')?.hasError('required')">
+          Date and time are required
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="mt-4">
+    <button mat-button (click)="cancel()">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="create()" [disabled]="form.invalid">
+      <mat-icon>add_circle</mat-icon>
+      Create Event
+    </button>
+  </mat-dialog-actions>
+</div>

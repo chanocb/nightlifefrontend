@@ -6,11 +6,12 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { AuthService } from "@core/services/auth.service";
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, AsyncPipe],
+  imports: [NgIf, NgFor, FormsModule, AsyncPipe, MatIconModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

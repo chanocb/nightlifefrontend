@@ -1,73 +1,155 @@
-<div class="container mt-4">
-  <div *ngIf="isLoading" class="text-center">
-    <p>Cargando datos del evento...</p>
+<div class="container py-4">
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Loading event data...</p>
   </div>
 
-  <button *ngIf="isOwner" class="btn btn-primary mt-3" (click)="addAccessType()" >Añadir tipo de acceso</button>
+  <button *ngIf="isOwner" class="btn btn-primary mb-4" (click)="addAccessType()">
+    <i class="fas fa-plus me-2"></i>Add Access Type
+  </button>
 
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
-  <div *ngIf="!isLoading && event" class="card shadow-sm">
-    <div class="card-header">
-      <h2>{{ event.name }}</h2>
-      <div *ngIf="isOwner && canValidate" class="mt-2">
-        <button class="btn btn-primary" (click)="goToValidate()">
-          <mat-icon>check</mat-icon>
-          Validar Reservas
-        </button>
+  <div *ngIf="!isLoading && event" class="card shadow-sm mb-4">
+    <div class="card-header bg-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="h3 mb-0 text-primary">{{ event.name }}</h2>
+        <div *ngIf="isOwner && canValidate">
+          <button class="btn btn-primary" (click)="goToValidate()">
+            <i class="fas fa-check me-2"></i>Validate Reservations
+          </button>
+        </div>
       </div>
     </div>
     <div class="card-body">
-      <p><strong>Descripción:</strong> {{ event.description }}</p>
-      <p><strong>Fecha y hora:</strong> {{ event.dateTime | date: 'dd \'de\' MMMM \'de\' yyyy, HH:mm' }}</p>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <h5 class="card-title h6 text-muted mb-2">Description</h5>
+              <p class="card-text mb-0">{{ event.description }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <h5 class="card-title h6 text-muted mb-2">Date and Time</h5>
+              <p class="card-text mb-0">
+                <i class="far fa-calendar-alt me-2"></i>
+                {{ event.dateTime | date: 'dd \'of\' MMMM yyyy, HH:mm' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="accessTypes.length > 0" class="mt-4">
-      <h3>Tipos de Acceso</h3>
-      <ul class="list-group">
-        <li *ngFor="let accessType of accessTypes;  index as i" class="list-group-item d-flex justify-content-between align-items-center">
-          <span>
-            <h5><strong>{{ accessType.title }}</strong></h5>
-            <p><strong>Capacidad Máxima:</strong> {{ accessType.capacityMax }}</p>
-            <p><strong>Hora Límite:</strong> {{ accessType.limitHourMax.substring(0, 5) }}</p>
-            <p><strong>Número de Bebidas:</strong> {{ accessType.numDrinks }}</p>
-          </span>
-          <div class="d-flex align-items-center" >
-            <input *ngIf="!isOwner"
-              type="number" 
-              class="form-control form-control-sm me-2" 
-              style="width: 80px;" 
-              [(ngModel)]="quantitySelected[i].quantity"
-              [max]="accessType.capacityMax"
-              (input)="updateTotals()" 
-              [min]="0"
-              placeholder="0">
-            <span class="badge bg-primary text-white">{{ accessType.price | currency:'EUR' }}</span>
-            <button *ngIf="isOwner" class="btn btn-primary btn-sm me-2" (click)="editAccessType(i)">Editar</button>
-            <button *ngIf="isOwner" class="btn btn-danger btn-sm" (click)="deleteAccessType(i)">Borrar</button>
+    <div *ngIf="accessTypes.length > 0" class="card-body border-top">
+      <h4 class="h5 mb-4 text-primary">Access Types</h4>
+      <div class="row g-3">
+        <div *ngFor="let accessType of accessTypes; index as i" class="col-12">
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="h6 mb-3">{{ accessType.title }}</h5>
+                  <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-users me-2 text-muted"></i>
+                      <span class="text-muted">Max Capacity:</span>
+                      <span class="ms-2 fw-medium">{{ accessType.capacityMax }}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <i class="far fa-clock me-2 text-muted"></i>
+                      <span class="text-muted">Time Limit:</span>
+                      <span class="ms-2 fw-medium">{{ accessType.limitHourMax.substring(0, 5) }}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-glass-martini-alt me-2 text-muted"></i>
+                      <span class="text-muted">Drinks Included:</span>
+                      <span class="ms-2 fw-medium">{{ accessType.numDrinks }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div *ngIf="!isOwner" class="d-flex align-items-center">
+                    <input 
+                      type="number" 
+                      class="form-control form-control-sm" 
+                      style="width: 80px;" 
+                      [(ngModel)]="quantitySelected[i].quantity"
+                      [max]="accessType.capacityMax"
+                      (input)="updateTotals()" 
+                      [min]="0"
+                      placeholder="0">
+                  </div>
+                  <span class="badge bg-primary fs-6">{{ accessType.price | currency:'EUR' }}</span>
+                  <div *ngIf="isOwner" class="btn-group">
+                    <button class="btn btn-outline-primary btn-sm" (click)="editAccessType(i)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" (click)="deleteAccessType(i)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
     
-    <div class="mt-4" *ngIf="!isOwner">
-      <h4>Resumen</h4>
-      <p><strong>Total de entradas:</strong> {{ totalTickets }}</p>
-      <p><strong>Precio total:</strong> {{ totalPrice | currency:'EUR' }}</p>
+    <div *ngIf="!isOwner" class="card-body border-top">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card border-0 bg-light">
+            <div class="card-body">
+              <h5 class="h6 text-muted mb-3">Reservation Summary</h5>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Total Tickets:</span>
+                <span class="fw-medium">{{ totalTickets }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Total Price:</span>
+                <span class="fw-bold text-primary">{{ totalPrice | currency:'EUR' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 d-flex align-items-end justify-content-end">
+          <button *ngIf="accessTypes.length > 0 && isClient" 
+                  class="btn btn-primary" 
+                  (click)="createReservation()">
+            <i class="fas fa-ticket-alt me-2"></i>Create Reservation
+          </button>
+        </div>
+      </div>
     </div>
-    <div *ngIf="!isOwner && accessTypes.length > 0 && isClient" class="text-end mt-3">
-      <button class="btn btn-success" (click)="createReservation()">
-        Crear reserva
-      </button>
+
+    <div *ngIf="!accessTypes || accessTypes.length === 0" class="card-body border-top">
+      <div class="alert alert-info mb-0">
+        <i class="fas fa-info-circle me-2"></i>
+        No access types available for this event.
+      </div>
     </div>
-    <div *ngIf="!accessTypes || accessTypes.length === 0" class="mt-4">
-      <p>No hay tipos de acceso disponibles para este evento.</p>
-    </div>
-    <div *ngIf="reservationsCreated.length !== 0 || reservationsFailed.length !== 0" class="mt-4">
-      <p>Tienes {{ reservationsCreated.length}} reservas creadas y Tienes {{ reservationsFailed.length}} reservas falladas</p>
+
+    <div *ngIf="reservationsCreated.length !== 0 || reservationsFailed.length !== 0" class="card-body border-top">
+      <div class="alert" [ngClass]="{'alert-success': reservationsCreated.length > 0, 'alert-danger': reservationsFailed.length > 0}">
+        <div *ngIf="reservationsCreated.length > 0" class="mb-2">
+          <i class="fas fa-check-circle me-2"></i>
+          {{ reservationsCreated.length }} reservation(s) created successfully
+        </div>
+        <div *ngIf="reservationsFailed.length > 0">
+          <i class="fas fa-times-circle me-2"></i>
+          {{ reservationsFailed.length }} reservation(s) failed
+        </div>
+      </div>
     </div>
   </div>
-  
 </div>

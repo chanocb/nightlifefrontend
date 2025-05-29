@@ -1,13 +1,11 @@
 <div class="container mt-4">
-  <h2 class="mb-4 text-center">Validar reserva</h2>
+  <h2 class="mb-4 text-center">Validate Reservation</h2>
 
-  <!-- Mensaje de estado -->
   <div *ngIf="message" class="alert" [ngClass]="{'alert-success': validReservation, 'alert-danger': !validReservation}">
     {{ message }}
   </div>
 
-  <!-- Scanner -->
-  <div *ngIf="isCameraActive">
+  <div *ngIf="isCameraActive" class="scanner-container">
     <zxing-scanner
       [formats]="[BarcodeFormat.QR_CODE]"
       [device]="selectedDevice"
@@ -15,57 +13,23 @@
     </zxing-scanner>
   </div>
 
-  <!-- Detalles de la reserva válida -->
-  <div *ngIf="validReservation" class="card mt-4">
+  <div *ngIf="validReservation" class="card shadow-sm mt-4">
     <div class="card-body">
-      <h3>Detalles de la reserva:</h3>
-      <ul>
-        <li><strong>ID:</strong> {{ validReservation.reference }}</li>
-        <li><strong>Nombre:</strong> {{ validReservation.user.firstName }}</li>
-        <li><strong>Apellido:</strong> {{ validReservation.user.lastName }}</li>
-        <li><strong>Tipo de acceso:</strong> {{ validReservation.accessType.title }}</li>
-        <li><strong>Estado:</strong> {{ validReservation.status }}</li>
+      <h3 class="card-title">Reservation Details:</h3>
+      <ul class="list-unstyled">
+        <li class="mb-2"><strong>ID:</strong> {{ validReservation.reference }}</li>
+        <li class="mb-2"><strong>Name:</strong> {{ validReservation.user.firstName }}</li>
+        <li class="mb-2"><strong>Last Name:</strong> {{ validReservation.user.lastName }}</li>
+        <li class="mb-2"><strong>Access Type:</strong> {{ validReservation.accessType.title }}</li>
+        <li class="mb-2"><strong>Status:</strong> {{ validReservation.status }}</li>
       </ul>
     </div>
   </div>
 
-  <!-- Botón para reiniciar -->
   <div *ngIf="!isCameraActive" class="text-center mt-4">
     <button class="btn btn-primary" (click)="restartScanning()">
-      Escanear otra reserva
+      Scan Another Reservation
     </button>
   </div>
 </div>
 
-<style>
-.alert {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-  color: #155724;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  color: #721c24;
-}
-
-.card {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.card-body ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.card-body li {
-  margin-bottom: 0.5rem;
-}
-</style>
