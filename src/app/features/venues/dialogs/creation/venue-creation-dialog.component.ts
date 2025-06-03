@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogActions, MatDialogContent, MatDialogTitle, MatDialogRef } from '@angular/material/dialog';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
@@ -19,7 +19,7 @@ import { MatOptionModule } from '@angular/material/core';
   standalone: true,
   imports: [
     FormsModule, ReactiveFormsModule, MatDialogContent, MatFormField, MatLabel, MatDialogActions, 
-    MatDialogTitle, MatInput, MatDialogClose, MatButton, MatCheckbox, MatError, CommonModule, MatDialogContent, MatIcon,
+    MatDialogTitle, MatInput, MatButton, MatCheckbox, MatError, CommonModule, MatDialogContent, MatIcon,
     MatSelectModule, MatOptionModule
   ],
   templateUrl: './venue-creation-dialog.component.html',

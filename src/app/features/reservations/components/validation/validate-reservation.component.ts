@@ -39,7 +39,7 @@ export class ValidatateReservationComponent implements OnInit {
           const constraints = {
             video: {
               deviceId: this.selectedDevice.deviceId,
-              facingMode: { exact: 'environment' },
+              facingMode: 'environment',
               width: { ideal: 1280 },
               height: { ideal: 720 }
             }
@@ -50,7 +50,7 @@ export class ValidatateReservationComponent implements OnInit {
               if (videoElement) {
                 videoElement.srcObject = stream;
                 videoElement.setAttribute('playsinline', 'true');
-                videoElement.style.transform = 'rotate(180deg)';
+                //videoElement.style.transform = 'rotate(180deg)';
               }
             })
             .catch(err => {
