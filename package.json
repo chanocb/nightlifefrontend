@@ -1,6 +1,6 @@
 {
   "name": "nightlifefrontend",
-  "version": "1.4.0-Release",
+  "version": "1.4.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
